@@ -9,7 +9,7 @@ namespace GoogleSpreadSheetLoader
     {
         private readonly TabbedView _tabbedView = new();
         
-        [MenuItem("Tools/Google Spread Sheet Loader")]
+        [MenuItem("Tools/GSSL/Open Window", priority = 0)]
         public static void ShowWindow()
         {
             var window = GetWindow<GSSL_EditorWindow>(true, "Google Spread Sheet Loader");

@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3248c3c7786636e4ea4ade44df6a63b7, type: 3}
+  m_Name: CardEffectTypeTable
+  m_EditorClassIdentifier: Assembly-CSharp::CardEffectTypeTable
+  dataList:
+  - _effect_type: 0
+    _min_value: 0
+    _max_value: 100
+    _description_key: effect_deal_damage_desc
+    _is_bool: 0
+    _requires_penalty_over: 15
+  - _effect_type: 1
+    _min_value: 0
+    _max_value: 15
+    _description_key: effect_gain_shield_desc
+    _is_bool: 0
+    _requires_penalty_over: -1
+  - _effect_type: 2
+    _min_value: 0
+    _max_value: 99
+    _description_key: effect_heal_hp_desc
+    _is_bool: 0
+    _requires_penalty_over: -1
+  - _effect_type: 3
+    _min_value: -999
+    _max_value: 10
+    _description_key: effect_player_hp_change_desc
+    _is_bool: 0
+    _requires_penalty_over: -1
+  - _effect_type: 4
+    _min_value: 0
+    _max_value: 10
+    _description_key: effect_mana_recover_desc
+    _is_bool: 0
+    _requires_penalty_over: -1
+  - _effect_type: 5
+    _min_value: -5
+    _max_value: 5
+    _description_key: effect_max_mana_change_desc
+    _is_bool: 0
+    _requires_penalty_over: -1
+  - _effect_type: 6
+    _min_value: 0
+    _max_value: 1
+    _description_key: effect_set_invulnerable_desc
+    _is_bool: 1
+    _requires_penalty_over: -1
+  - _effect_type: 7
+    _min_value: 0
+    _max_value: 1
+    _description_key: effect_free_next_card_desc
+    _is_bool: 1
+    _requires_penalty_over: -1
+  - _effect_type: 8
+    _min_value: 0
+    _max_value: 1
+    _description_key: effect_gain_mana_from_hp_desc
+    _is_bool: 1
+    _requires_penalty_over: -1

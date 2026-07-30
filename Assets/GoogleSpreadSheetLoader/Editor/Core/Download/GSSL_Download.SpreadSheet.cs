@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GoogleSpreadSheetLoader.Auth;
 using GoogleSpreadSheetLoader.Setting;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
@@ -27,11 +28,13 @@ namespace GoogleSpreadSheetLoader.Download
             SetProgressState(eGSSL_State.Prepare);
             EditorWindow.focusedWindow?.Repaint();
 
+            var accessToken = await GSSL_ServiceAccountAuth.GetAccessTokenAsync(cancellationToken);
+
             var listInfoOperPair = new List<(SpreadSheetInfo info, UnityWebRequestAsyncOperation oper)>();
 
             listInfoOperPair.AddRange(from info in listDownloadTarget
-                                      let url = string.Format(GSSL_URL.DownloadSpreadSheetUrl, info.spreadSheetId, GSSL_Setting.SettingData.apiKey)
-                                      let webRequest = UnityWebRequest.Get(url)
+                                      let url = string.Format(GSSL_URL.DownloadSpreadSheetUrl, info.spreadSheetId)
+                                      let webRequest = GSSL_AuthenticatedRequest.CreateGet(url, accessToken)
                                       let asyncOperator = webRequest.SendWebRequest()
                                       select (info, asyncOperator));
 
@@ -118,11 +121,12 @@ namespace GoogleSpreadSheetLoader.Download
                         await Task.Delay(2000, cancellationToken); // 재시도 간격
                     }
 
+                    var accessToken = await GSSL_ServiceAccountAuth.GetAccessTokenAsync(cancellationToken);
                     var listInfoOperPair = new List<(SpreadSheetInfo info, UnityWebRequestAsyncOperation oper)>();
 
                     listInfoOperPair.AddRange(from info in listDownloadTarget
-                                              let url = string.Format(GSSL_URL.DownloadSpreadSheetUrl, info.spreadSheetId, GSSL_Setting.SettingData.apiKey)
-                                              let webRequest = UnityWebRequest.Get(url)
+                                              let url = string.Format(GSSL_URL.DownloadSpreadSheetUrl, info.spreadSheetId)
+                                              let webRequest = GSSL_AuthenticatedRequest.CreateGet(url, accessToken)
                                               let asyncOperator = webRequest.SendWebRequest()
                                               select (info, asyncOperator));
                                               
@@ -296,8 +300,9 @@ namespace GoogleSpreadSheetLoader.Download
                         await Task.Delay(2000, cancellationToken);
                     }
 
-                    var url = string.Format(GSSL_URL.DownloadSpreadSheetUrl, spreadSheetId, GSSL_Setting.SettingData.apiKey);
-                    var webRequest = UnityWebRequest.Get(url);
+                    var accessToken = await GSSL_ServiceAccountAuth.GetAccessTokenAsync(cancellationToken);
+                    var url = string.Format(GSSL_URL.DownloadSpreadSheetUrl, spreadSheetId);
+                    var webRequest = GSSL_AuthenticatedRequest.CreateGet(url, accessToken);
                     var asyncOperator = webRequest.SendWebRequest();
                     allWebRequests.Add(webRequest);
 

@@ -1,0 +1,532 @@
+[
+  [
+    "id-string",
+    "Korean-string",
+    "English-string"
+  ],
+  [
+    "monster_slime_01",
+    "슬라임",
+    "Slime"
+  ],
+  [
+    "monster_goblin_01",
+    "고블린 전사",
+    "Goblin Warrior"
+  ],
+  [
+    "monster_orc_chief_01",
+    "오크 족장",
+    "Orc Chieftain"
+  ],
+  [
+    "monster_wraith_knight_01",
+    "망령 기사",
+    "Wraith Knight"
+  ],
+  [
+    "monster_dragon_boss_01",
+    "심연의 드래곤",
+    "Dragon of the Abyss"
+  ],
+  [
+    "enemy_action_attack",
+    "⚔ 공격 ({0})",
+    "⚔ Attack ({0})"
+  ],
+  [
+    "enemy_action_defend",
+    "🛡 방어 (+{0})",
+    "🛡 Defend (+{0})"
+  ],
+  [
+    "enemy_action_breath",
+    "🔥 브레스 ({0})",
+    "🔥 Breath ({0})"
+  ],
+  [
+    "enemy_action_drain",
+    "🔮 마나 흡수 (-{0})",
+    "🔮 Mana Drain (-{0})"
+  ],
+  [
+    "enemy_action_attack_drain",
+    "⚔ 공격 ({0}) · 🔮 마나 흡수",
+    "⚔ Attack ({0}) · 🔮 Mana Drain"
+  ],
+  [
+    "enemy_action_idle",
+    "… 대기",
+    "… Idle"
+  ],
+  [
+    "card_atk_01_name",
+    "검격",
+    "Slash"
+  ],
+  [
+    "card_atk_01_desc",
+    "적에게 3의 피해를 입힌다.",
+    "Deal 3 damage to the enemy."
+  ],
+  [
+    "card_def_01_name",
+    "방패",
+    "Bulwark"
+  ],
+  [
+    "card_def_01_desc",
+    "방어도 3을 얻는다.",
+    "Gain 3 shield."
+  ],
+  [
+    "card_heal_01_name",
+    "회복",
+    "Mend"
+  ],
+  [
+    "card_heal_01_desc",
+    "체력을 1 회복한다.",
+    "Restore 1 HP."
+  ],
+  [
+    "node_battle_name",
+    "전투",
+    "Battle"
+  ],
+  [
+    "node_battle_desc",
+    "일반 몬스터와 교전한다. 카드 생성 1회.",
+    "Fight a normal monster. One card generation."
+  ],
+  [
+    "node_elite_name",
+    "정예",
+    "Elite"
+  ],
+  [
+    "node_elite_desc",
+    "강화된 몬스터와 교전한다. 후보 2장 중 1장 선택.",
+    "Fight an empowered monster. Draft one of two cards."
+  ],
+  [
+    "node_rest_name",
+    "야영지",
+    "Campsite"
+  ],
+  [
+    "node_rest_desc",
+    "휴식, 정화, 각인 중 하나를 선택한다.",
+    "Choose one of rest, purge, or sigil."
+  ],
+  [
+    "node_event_name",
+    "제단",
+    "Altar"
+  ],
+  [
+    "node_event_desc",
+    "무슨 일이 일어날지 알 수 없다.",
+    "There is no telling what awaits."
+  ],
+  [
+    "node_treasure_name",
+    "보물",
+    "Treasure"
+  ],
+  [
+    "node_treasure_desc",
+    "영구 강화 3가지 중 하나를 선택한다.",
+    "Choose one of three permanent upgrades."
+  ],
+  [
+    "node_boss_name",
+    "보스",
+    "Boss"
+  ],
+  [
+    "node_boss_desc",
+    "챕터의 최종 보스와 교전한다.",
+    "Face the chapter's final boss."
+  ],
+  [
+    "threat_tier_0",
+    "기본 밸런스",
+    "Baseline balance"
+  ],
+  [
+    "threat_tier_1",
+    "체력만 소폭 상승",
+    "Slightly increased health"
+  ],
+  [
+    "threat_tier_2",
+    "체력과 공격력 상승",
+    "Increased health and attack"
+  ],
+  [
+    "threat_tier_3",
+    "방어 패턴 획득",
+    "Gains a defend pattern"
+  ],
+  [
+    "threat_tier_4",
+    "강공격 패턴 획득",
+    "Gains a heavy attack pattern"
+  ],
+  [
+    "threat_tier_5",
+    "최종 난이도",
+    "Maximum difficulty"
+  ],
+  [
+    "effect_deal_damage_desc",
+    "적에게 피해를 입힌다.",
+    "Deal damage to the enemy."
+  ],
+  [
+    "effect_gain_shield_desc",
+    "방어도를 얻는다.",
+    "Gain shield."
+  ],
+  [
+    "effect_heal_hp_desc",
+    "체력을 회복한다.",
+    "Restore HP."
+  ],
+  [
+    "effect_player_hp_change_desc",
+    "체력을 직접 증감시킨다.",
+    "Directly change HP."
+  ],
+  [
+    "effect_mana_recover_desc",
+    "현재 마나를 즉시 회복한다.",
+    "Immediately recover mana."
+  ],
+  [
+    "effect_max_mana_change_desc",
+    "최대 마나 한도를 영구히 변경한다.",
+    "Permanently change the max mana limit."
+  ],
+  [
+    "effect_set_invulnerable_desc",
+    "다음 적 공격 1회를 완전히 무효화한다.",
+    "Fully negate the next enemy attack."
+  ],
+  [
+    "effect_free_next_card_desc",
+    "다음 카드의 마나 소모를 0으로 만든다.",
+    "The next card costs no mana."
+  ],
+  [
+    "effect_gain_mana_from_hp_desc",
+    "마나 1과 체력 1을 소모해 마나 5를 얻는다.",
+    "Spend 1 mana and 1 HP to gain 5 mana."
+  ],
+  [
+    "rest_heal_name",
+    "휴식",
+    "Rest"
+  ],
+  [
+    "rest_heal_desc",
+    "최대 체력의 절반만큼 체력을 회복한다.",
+    "Restore half of your max HP."
+  ],
+  [
+    "rest_purge_name",
+    "정화",
+    "Purge"
+  ],
+  [
+    "rest_purge_desc",
+    "덱에서 카드 1장을 영구 제거한다. 생성 카드라면 위협도가 감소한다.",
+    "Permanently remove one card. Removing a generated card lowers threat."
+  ],
+  [
+    "rest_sigil_name",
+    "각인",
+    "Sigil"
+  ],
+  [
+    "rest_sigil_desc",
+    "덱 카드 1장의 마나 비용을 1 낮춘다. 위협도가 오를 수 있다.",
+    "Reduce one card's mana cost by 1. Threat may rise."
+  ],
+  [
+    "treasure_mana_name",
+    "마력의 원천",
+    "Wellspring of Magic"
+  ],
+  [
+    "treasure_mana_desc",
+    "최대 마나가 영구히 1 증가한다.",
+    "Permanently gain 1 max mana."
+  ],
+  [
+    "treasure_life_name",
+    "생명의 성배",
+    "Grail of Life"
+  ],
+  [
+    "treasure_life_desc",
+    "최대 체력이 3 증가하고 현재 체력도 3 회복한다.",
+    "Gain 3 max HP and restore 3 HP."
+  ],
+  [
+    "treasure_blank_name",
+    "백지 카드",
+    "Blank Card"
+  ],
+  [
+    "treasure_blank_desc",
+    "즉시 카드를 1회 생성한다. 위협도는 절반만 가산된다.",
+    "Generate one card now. Only half the threat is added."
+  ],
+  [
+    "event_pass",
+    "지나친다",
+    "Move on"
+  ],
+  [
+    "event_altar_greed_name",
+    "탐욕의 계약",
+    "Pact of Greed"
+  ],
+  [
+    "event_altar_greed_desc",
+    "제단이 힘을 약속한다. 대가는 더 강한 적이다.",
+    "The altar promises power. The price is stronger foes."
+  ],
+  [
+    "event_altar_greed_a",
+    "카드를 생성한다 (위협도 +10)",
+    "Generate a card (threat +10)"
+  ],
+  [
+    "event_altar_oblivion_name",
+    "망각의 제단",
+    "Altar of Oblivion"
+  ],
+  [
+    "event_altar_oblivion_desc",
+    "창조물을 바치면 육신이 강해진다.",
+    "Offer a creation to strengthen your body."
+  ],
+  [
+    "event_altar_oblivion_a",
+    "생성 카드 1장을 소멸시킨다 (최대 체력 +2)",
+    "Destroy one generated card (max HP +2)"
+  ],
+  [
+    "event_altar_essence_name",
+    "마나 정수",
+    "Mana Essence"
+  ],
+  [
+    "event_altar_essence_desc",
+    "생명을 마력으로 바꿀 수 있다.",
+    "Life can be traded for magic."
+  ],
+  [
+    "event_altar_essence_a",
+    "최대 마나 +1, 최대 체력 -2",
+    "Max mana +1, max HP -2"
+  ],
+  [
+    "event_altar_essence_b",
+    "최대 체력 +3",
+    "Max HP +3"
+  ],
+  [
+    "event_altar_merchant_name",
+    "떠도는 상인",
+    "Wandering Merchant"
+  ],
+  [
+    "event_altar_merchant_desc",
+    "피를 지불하면 더 강한 창조를 허락한다.",
+    "Pay in blood for a mightier creation."
+  ],
+  [
+    "event_altar_merchant_a",
+    "체력 -3, 다음 생성 1회 이펙트 상한 확장",
+    "HP -3, next generation gets an expanded effect cap"
+  ],
+  [
+    "event_altar_camp_name",
+    "버려진 야영지",
+    "Abandoned Campsite"
+  ],
+  [
+    "event_altar_camp_desc",
+    "누군가 남긴 불씨가 아직 따뜻하다.",
+    "Someone's embers are still warm."
+  ],
+  [
+    "event_altar_camp_a",
+    "체력 +4",
+    "HP +4"
+  ],
+  [
+    "event_altar_camp_b",
+    "덱 카드 1장을 제거한다",
+    "Remove one card from the deck"
+  ],
+  [
+    "event_altar_sarcophagus_name",
+    "봉인된 석관",
+    "Sealed Sarcophagus"
+  ],
+  [
+    "event_altar_sarcophagus_desc",
+    "봉인을 풀면 창조물 하나가 대가로 사라진다.",
+    "Breaking the seal costs one of your creations."
+  ],
+  [
+    "event_altar_sarcophagus_a",
+    "위협도 -15, 무작위 생성 카드 1장 소멸",
+    "Threat -15, destroy a random generated card"
+  ],
+  [
+    "ui_end_turn",
+    "턴 종료",
+    "End Turn"
+  ],
+  [
+    "ui_enemy_turn",
+    "적의 턴...",
+    "Enemy turn..."
+  ],
+  [
+    "ui_deck",
+    "덱",
+    "Deck"
+  ],
+  [
+    "ui_discard",
+    "버림",
+    "Discard"
+  ],
+  [
+    "ui_card_use_hint",
+    "한 번 더 클릭하면 카드를 사용합니다",
+    "Click again to play this card"
+  ],
+  [
+    "ui_hand_empty",
+    "손패가 비었습니다",
+    "Your hand is empty"
+  ],
+  [
+    "ui_generate_card",
+    "🃏 카드 생성하기",
+    "🃏 Generate a Card"
+  ],
+  [
+    "ui_skip_to_map",
+    "건너뛰고 맵으로 →",
+    "Skip to the map →"
+  ],
+  [
+    "ui_add_to_deck",
+    "덱에 추가 후 맵으로 →",
+    "Add to deck and continue →"
+  ],
+  [
+    "ui_not_add_to_deck",
+    "덱에 추가하지 않고 맵으로 →",
+    "Discard and continue →"
+  ],
+  [
+    "ui_threat_keep",
+    "위협도 유지",
+    "Threat unchanged"
+  ],
+  [
+    "ui_threat_no_change",
+    "위협도 변화 없음",
+    "No threat change"
+  ],
+  [
+    "ui_enter_node",
+    "진입 →",
+    "Enter →"
+  ],
+  [
+    "ui_enter_elite",
+    "⚠️ 정예와 교전",
+    "⚠️ Engage the Elite"
+  ],
+  [
+    "ui_enter_boss",
+    "⚠️ 보스와 교전",
+    "⚠️ Engage the Boss"
+  ],
+  [
+    "ui_locked_node_toast",
+    "현재 위치에서 갈 수 없는 길입니다",
+    "You cannot reach that path from here"
+  ],
+  [
+    "ui_confirm_to_map",
+    "확정하고 맵으로 →",
+    "Confirm and continue →"
+  ],
+  [
+    "ui_elite_draft_hint",
+    "☠ 정예 보상 — 두 장 중 한 장만 가져갈 수 있습니다",
+    "☠ Elite reward — you may keep only one"
+  ],
+  [
+    "ui_next_free",
+    "✨ 다음 무료",
+    "✨ Next Free"
+  ],
+  [
+    "ui_attack_negate",
+    "🛡️ 공격 무효",
+    "🛡️ Attack Negated"
+  ],
+  [
+    "ui_game_over",
+    "GAME OVER",
+    "GAME OVER"
+  ],
+  [
+    "ui_victory",
+    "VICTORY!",
+    "VICTORY!"
+  ],
+  [
+    "ui_restart",
+    "다시 시작",
+    "Restart"
+  ],
+  [
+    "ui_gen_loading_1",
+    "AI가 카드를 분석 중...",
+    "Analyzing your card..."
+  ],
+  [
+    "ui_gen_loading_2",
+    "마력 패턴을 계산 중...",
+    "Calculating arcane patterns..."
+  ],
+  [
+    "ui_gen_loading_3",
+    "밸런스를 검토 중...",
+    "Reviewing balance..."
+  ],
+  [
+    "ui_gen_loading_4",
+    "고유 능력을 생성 중...",
+    "Generating unique abilities..."
+  ],
+  [
+    "ui_gen_loading_5",
+    "카드를 완성하는 중...",
+    "Finalizing the card..."
+  ]
+]

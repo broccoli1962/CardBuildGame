@@ -528,11 +528,13 @@ namespace GoogleSpreadSheetLoader.OneButton
             {
                 GSSL_Log.Log("개별 시트 최신화가 취소되었습니다.");
                 SetProgressState(eGSSL_State.None);
+                throw;
             }
             catch (Exception ex)
             {
-                GSSL_Log.LogError($"개별 시트 최신화 중 에러가 발생했습니다: {ex.Message}");
+                GSSL_Log.LogError($"개별 시트 최신화 중 에러가 발생했습니다: {ex.Message}\n{ex.StackTrace}");
                 SetProgressState(eGSSL_State.None);
+                throw;
             }
             finally
             {

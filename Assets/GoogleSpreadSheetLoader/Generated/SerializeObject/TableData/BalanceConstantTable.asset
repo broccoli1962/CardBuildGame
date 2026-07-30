@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f262760553e241c4f8e1878293d28ed5, type: 3}
+  m_Name: BalanceConstantTable
+  m_EditorClassIdentifier: Assembly-CSharp::BalanceConstantTable
+  dataList:
+  - _key: mana_cost_multiplier
+    _value: 1.5
+    _desc: "CPS \uC0B0\uC2DD\uC5D0\uC11C mana_cost\uC5D0 \uACF1\uD574 \uCC28\uAC10\uD558\uB294
+      \uACC4\uC218"
+  - _key: usability_factor_normal
+    _value: 1
+    _desc: "mana_cost <= max_mana \uC77C \uB54C \uC0AC\uC6A9 \uAC00\uB2A5\uC131 \uACC4\uC218"
+  - _key: usability_factor_mana_over
+    _value: 0.5
+    _desc: "mana_cost > max_mana \uC77C \uB54C \uC0AC\uC6A9 \uAC00\uB2A5\uC131 \uACC4\uC218"
+  - _key: player_start_hp
+    _value: 10
+    _desc: "\uD50C\uB808\uC774\uC5B4 \uC2DC\uC791 \uCCB4\uB825"
+  - _key: player_start_max_hp
+    _value: 10
+    _desc: "\uD50C\uB808\uC774\uC5B4 \uC2DC\uC791 \uCD5C\uB300 \uCCB4\uB825"
+  - _key: player_start_max_mana
+    _value: 10
+    _desc: "\uD50C\uB808\uC774\uC5B4 \uC2DC\uC791 \uCD5C\uB300 \uB9C8\uB098"
+  - _key: hand_size
+    _value: 5
+    _desc: "\uD56D\uC0C1 \uC720\uC9C0\uB418\uB294 \uC190\uD328 \uC7A5\uC218"
+  - _key: base_deck_limit
+    _value: 10
+    _desc: "\uAE30\uBCF8 \uB371 \uCD5C\uB300 \uC218\uB7C9"
+  - _key: deck_min_size
+    _value: 5
+    _desc: "\uC815\uD654 \uAC00\uB2A5 \uCD5C\uC18C \uB371 \uD06C\uAE30"
+  - _key: card_name_max_length
+    _value: 8
+    _desc: "\uC0DD\uC131 \uCE74\uB4DC \uC774\uB984 \uCD5C\uB300 \uAE38\uC774"
+  - _key: card_desc_max_length
+    _value: 100
+    _desc: "\uC0DD\uC131 \uCE74\uB4DC \uC124\uBA85 \uCD5C\uB300 \uAE38\uC774"
+  - _key: card_mana_cost_max
+    _value: 15
+    _desc: "\uCE74\uB4DC \uB9C8\uB098 \uBE44\uC6A9 \uC0C1\uD55C"
+  - _key: hp_mult_cap
+    _value: 2.2
+    _desc: "\uBAAC\uC2A4\uD130 \uCCB4\uB825 \uBC30\uC218 \uD558\uB4DC \uCEA1"
+  - _key: atk_mult_cap
+    _value: 1.5
+    _desc: "\uBAAC\uC2A4\uD130 \uACF5\uACA9\uB825 \uBC30\uC218 \uD558\uB4DC \uCEA1"
+  - _key: boss_atk_mult_cap
+    _value: 1.35
+    _desc: "\uBCF4\uC2A4 \uC804\uC6A9 \uACF5\uACA9\uB825 \uBC30\uC218 \uD558\uB4DC
+      \uCEA1"
+  - _key: enemy_turn_delay
+    _value: 1.4
+    _desc: "\uC801 \uD134 \uC5F0\uCD9C \uB300\uAE30 \uC2DC\uAC04(\uCD08)"
+  - _key: llm_timeout
+    _value: 15
+    _desc: "\uB85C\uCEEC LLM \uD638\uCD9C \uD0C0\uC784\uC544\uC6C3(\uCD08)"
+  - _key: llm_temperature
+    _value: 0.7
+    _desc: "\uB85C\uCEEC LLM temperature"
+  - _key: map_gen_max_retry
+    _value: 20
+    _desc: "\uB9F5 \uC0DD\uC131 \uAC00\uB4DC\uB808\uC77C \uAC80\uC99D \uC2E4\uD328
+      \uC2DC \uCD5C\uB300 \uC7AC\uC2DC\uB3C4 \uD69F\uC218"
+  - _key: map_floor_count
+    _value: 5
+    _desc: "\uCC55\uD130\uB2F9 \uCE35 \uC218"
+  - _key: elite_bonus_max_hp
+    _value: 2
+    _desc: "\uC815\uC608 \uD074\uB9AC\uC5B4 \uC2DC \uCD5C\uB300 \uCCB4\uB825 \uC99D\uAC00\uB7C9"
+  - _key: blank_card_threat_ratio
+    _value: 0.5
+    _desc: "\uBCF4\uBB3C \uBC31\uC9C0 \uCE74\uB4DC\uC758 \uC704\uD611\uB3C4 \uAC00\uC0B0
+      \uBE44\uC728"

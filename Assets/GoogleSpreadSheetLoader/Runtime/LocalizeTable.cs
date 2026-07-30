@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
-using Util;
+// using Util;
 
 [System.Serializable]
 public class LocalizeKeyValue
@@ -26,7 +26,7 @@ public static class LocalizeTable
                 assetName += $"{language}";
                 break;
             default:
-                //Util.Debug.LogError($"해당 국가코드 ({language}) 는 정의 되지 않아 en으로 대체합니다.");
+                // Util.Debug.LogError($"해당 국가코드 ({language}) 는 정의 되지 않아 en으로 대체합니다.");
                 assetName += $"{SystemLanguage.English}";
                 break;
         }
@@ -51,7 +51,7 @@ public static class LocalizeTable
     {
         Initialize(language);
 
-        LanguageUtil.SetLanguageCode(language);
+        // LanguageUtil.SetLanguageCode(language);
 
         OnChangedLanguage?.Invoke();
     }
