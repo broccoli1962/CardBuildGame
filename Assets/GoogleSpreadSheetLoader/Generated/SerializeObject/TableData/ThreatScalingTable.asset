@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac14ba2b9fe103b47b4af05d3a6981e3, type: 3}
+  m_Name: ThreatScalingTable
+  m_EditorClassIdentifier: Assembly-CSharp::ThreatScalingTable
+  dataList:
+  - _tier: 0
+    _threat_min: 0
+    _hp_mult: 1
+    _atk_mult: 1
+    _extra_action: 0
+    _desc_key: threat_tier_0
+  - _tier: 1
+    _threat_min: 10
+    _hp_mult: 1.15
+    _atk_mult: 1
+    _extra_action: 0
+    _desc_key: threat_tier_1
+  - _tier: 2
+    _threat_min: 25
+    _hp_mult: 1.35
+    _atk_mult: 1.15
+    _extra_action: 0
+    _desc_key: threat_tier_2
+  - _tier: 3
+    _threat_min: 45
+    _hp_mult: 1.6
+    _atk_mult: 1.25
+    _extra_action: 2
+    _desc_key: threat_tier_3
+  - _tier: 4
+    _threat_min: 70
+    _hp_mult: 1.9
+    _atk_mult: 1.35
+    _extra_action: 3
+    _desc_key: threat_tier_4
+  - _tier: 5
+    _threat_min: 100
+    _hp_mult: 2.2
+    _atk_mult: 1.5
+    _extra_action: 3
+    _desc_key: threat_tier_5

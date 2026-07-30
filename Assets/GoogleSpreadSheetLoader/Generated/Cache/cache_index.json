@@ -1,0 +1,132 @@
+{
+    "cacheInfos": [
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "Monster",
+            "fileName": "Monster.txt",
+            "lastUpdated": "2026-07-30T16:56:17.6970908+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "Stage",
+            "fileName": "Stage.txt",
+            "lastUpdated": "2026-07-30T16:56:18.2460888+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "MonsterAction",
+            "fileName": "MonsterAction.txt",
+            "lastUpdated": "2026-07-30T16:56:18.6410922+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "CardPowerWeight",
+            "fileName": "CardPowerWeight.txt",
+            "lastUpdated": "2026-07-30T16:56:19.0310888+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "ThreatScaling",
+            "fileName": "ThreatScaling.txt",
+            "lastUpdated": "2026-07-30T16:56:19.5190888+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "BaseCard",
+            "fileName": "BaseCard.txt",
+            "lastUpdated": "2026-07-30T16:56:19.9070890+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "CardEffectType",
+            "fileName": "CardEffectType.txt",
+            "lastUpdated": "2026-07-30T16:56:20.2910900+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "MapNodeType",
+            "fileName": "MapNodeType.txt",
+            "lastUpdated": "2026-07-30T16:56:20.6780900+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "MapTemplate",
+            "fileName": "MapTemplate.txt",
+            "lastUpdated": "2026-07-30T16:56:21.0700884+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "MapEvent",
+            "fileName": "MapEvent.txt",
+            "lastUpdated": "2026-07-30T16:56:21.4550893+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "RestOption",
+            "fileName": "RestOption.txt",
+            "lastUpdated": "2026-07-30T16:56:21.8370874+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "EliteScaling",
+            "fileName": "EliteScaling.txt",
+            "lastUpdated": "2026-07-30T16:56:22.3260883+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "TreasureOption",
+            "fileName": "TreasureOption.txt",
+            "lastUpdated": "2026-07-30T16:56:22.7040881+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "BalanceConstant",
+            "fileName": "BalanceConstant.txt",
+            "lastUpdated": "2026-07-30T16:56:23.0930882+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "GameEnum",
+            "fileName": "GameEnum.txt",
+            "lastUpdated": "2026-07-30T16:56:23.4800885+09:00",
+            "tableStyle": 1
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "GeneralGameStringLocalization",
+            "fileName": "GeneralGameStringLocalization.txt",
+            "lastUpdated": "2026-07-30T16:56:23.9600889+09:00",
+            "tableStyle": 2
+        }
+    ]
+}

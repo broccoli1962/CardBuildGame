@@ -1,0 +1,16 @@
+[
+  [
+    "chapter-int",
+    "hp_mult-float",
+    "atk_mult-float",
+    "extra_action_count-int",
+    "bonus_max_hp-int"
+  ],
+  [
+    "1",
+    "1.5",
+    "1.2",
+    "1",
+    "2"
+  ]
+]

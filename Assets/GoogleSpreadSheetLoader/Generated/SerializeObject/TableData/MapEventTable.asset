@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0838cc7696d1ef64f997a47ec2919301, type: 3}
+  m_Name: MapEventTable
+  m_EditorClassIdentifier: Assembly-CSharp::MapEventTable
+  dataList:
+  - _event_id: altar_greed
+    _name_key: event_altar_greed_name
+    _desc_key: event_altar_greed_desc
+    _min_floor: 2
+    _option_a_key: event_altar_greed_a
+    _option_a_json: '{"grant_card_generation":1,"threat_add":10}'
+    _option_b_key: event_pass
+    _option_b_json: '{}'
+  - _event_id: altar_oblivion
+    _name_key: event_altar_oblivion_name
+    _desc_key: event_altar_oblivion_desc
+    _min_floor: 3
+    _option_a_key: event_altar_oblivion_a
+    _option_a_json: '{"destroy_generated_card":1,"max_hp_add":2,"threat_sub_cps":true}'
+    _option_b_key: event_pass
+    _option_b_json: '{}'
+  - _event_id: altar_essence
+    _name_key: event_altar_essence_name
+    _desc_key: event_altar_essence_desc
+    _min_floor: 2
+    _option_a_key: event_altar_essence_a
+    _option_a_json: '{"max_mana_add":1,"max_hp_add":-2}'
+    _option_b_key: event_altar_essence_b
+    _option_b_json: '{"max_hp_add":3}'
+  - _event_id: altar_merchant
+    _name_key: event_altar_merchant_name
+    _desc_key: event_altar_merchant_desc
+    _min_floor: 2
+    _option_a_key: event_altar_merchant_a
+    _option_a_json: '{"hp_add":-3,"pending_boon":"EffectCapExpand"}'
+    _option_b_key: event_pass
+    _option_b_json: '{}'
+  - _event_id: altar_camp
+    _name_key: event_altar_camp_name
+    _desc_key: event_altar_camp_desc
+    _min_floor: 2
+    _option_a_key: event_altar_camp_a
+    _option_a_json: '{"hp_add":4}'
+    _option_b_key: event_altar_camp_b
+    _option_b_json: '{"purge_card":1}'
+  - _event_id: altar_sarcophagus
+    _name_key: event_altar_sarcophagus_name
+    _desc_key: event_altar_sarcophagus_desc
+    _min_floor: 3
+    _option_a_key: event_altar_sarcophagus_a
+    _option_a_json: '{"threat_add":-15,"destroy_random_generated_card":1}'
+    _option_b_key: event_pass
+    _option_b_json: '{}'

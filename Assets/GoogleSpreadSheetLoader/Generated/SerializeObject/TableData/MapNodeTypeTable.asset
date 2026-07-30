@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 652fbc28c58db8e43add327b6c33e1a4, type: 3}
+  m_Name: MapNodeTypeTable
+  m_EditorClassIdentifier: Assembly-CSharp::MapNodeTypeTable
+  dataList:
+  - _node_type: 0
+    _name_key: node_battle_name
+    _icon_key: Node_StageActive
+    _desc_key: node_battle_desc
+    _has_battle: 1
+    _gen_count: 1
+    _min_floor: 1
+    _max_per_map: 99
+    _color_hex: '#e53e3e'
+  - _node_type: 1
+    _name_key: node_elite_name
+    _icon_key: Node_StageActive
+    _desc_key: node_elite_desc
+    _has_battle: 1
+    _gen_count: 1
+    _min_floor: 3
+    _max_per_map: 2
+    _color_hex: '#b91c1c'
+  - _node_type: 2
+    _name_key: node_rest_name
+    _icon_key: Node_StageInactive
+    _desc_key: node_rest_desc
+    _has_battle: 0
+    _gen_count: 0
+    _min_floor: 2
+    _max_per_map: 2
+    _color_hex: '#f97316'
+  - _node_type: 3
+    _name_key: node_event_name
+    _icon_key: Node_StageInactive
+    _desc_key: node_event_desc
+    _has_battle: 0
+    _gen_count: 0
+    _min_floor: 2
+    _max_per_map: 99
+    _color_hex: '#9f7aea'
+  - _node_type: 4
+    _name_key: node_treasure_name
+    _icon_key: Node_StageInactive
+    _desc_key: node_treasure_desc
+    _has_battle: 0
+    _gen_count: 0
+    _min_floor: 2
+    _max_per_map: 99
+    _color_hex: '#c9a227'
+  - _node_type: 5
+    _name_key: node_boss_name
+    _icon_key: Node_Boss
+    _desc_key: node_boss_desc
+    _has_battle: 1
+    _gen_count: 0
+    _min_floor: 5
+    _max_per_map: 1
+    _color_hex: '#e53e3e'

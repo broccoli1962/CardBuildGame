@@ -1,5 +1,7 @@
+using GoogleSpreadSheetLoader.Auth;
 using GoogleSpreadSheetLoader.OneButton;
 using UnityEditor;
+using UnityEditorInternal;
 using UnityEngine;
 using static GoogleSpreadSheetLoader.GSSL_State;
 
@@ -9,6 +11,7 @@ namespace GoogleSpreadSheetLoader.Setting
     {
         private bool _isEditMode = false;
         private SettingData _tempSettingData; // 임시 저장용
+        private ReorderableList _spreadSheetReorderableList;
 
         public void DrawIntegratedView()
         {
@@ -45,7 +48,7 @@ namespace GoogleSpreadSheetLoader.Setting
             EditorGUILayout.LabelField("설정", EditorStyles.boldLabel);
             EditorGUILayout.Space(5);
 
-            DrawApiKey();
+            DrawServiceAccountAuth();
             DrawSpreadSheetsInfos();
             DrawSheetSettings();
 
@@ -60,20 +63,50 @@ namespace GoogleSpreadSheetLoader.Setting
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawApiKey()
+        private void DrawServiceAccountAuth()
         {
-            EditorGUILayout.LabelField("API 키");
+            EditorGUILayout.LabelField("서비스 계정 JSON 경로");
+
+            var jsonPath = _tempSettingData.serviceAccountJsonPath;
 
             if (_isEditMode)
             {
-                _tempSettingData.apiKey = EditorGUILayout.TextField(_tempSettingData.apiKey);
+                EditorGUILayout.BeginHorizontal();
+                _tempSettingData.serviceAccountJsonPath = EditorGUILayout.TextField(_tempSettingData.serviceAccountJsonPath);
+                if (GUILayout.Button("찾아보기", GUILayout.Width(70)))
+                {
+                    var selectedPath = EditorUtility.OpenFilePanel("서비스 계정 JSON 선택", "", "json");
+                    if (!string.IsNullOrEmpty(selectedPath))
+                        _tempSettingData.serviceAccountJsonPath = selectedPath;
+                }
+                EditorGUILayout.EndHorizontal();
             }
             else
             {
-                var displayText = _tempSettingData.apiKey.Length > 10
-                    ? _tempSettingData.apiKey.Substring(0, 10) + "..."
-                    : _tempSettingData.apiKey;
-                EditorGUILayout.LabelField(displayText);
+                var displayText = string.IsNullOrWhiteSpace(jsonPath) ? "(미지정)" : jsonPath;
+                EditorGUILayout.LabelField(displayText, EditorStyles.wordWrappedLabel);
+            }
+
+            if (!string.IsNullOrWhiteSpace(jsonPath) && !GSSL_ServiceAccountAuth.IsJsonPathValid(jsonPath))
+            {
+                EditorGUILayout.HelpBox("지정한 경로에서 JSON 파일을 찾을 수 없습니다.", MessageType.Warning);
+            }
+
+            var serviceAccountEmail = _isEditMode
+                ? GSSL_ServiceAccountAuth.TryGetClientEmailFromPath(_tempSettingData.serviceAccountJsonPath)
+                : GSSL_ServiceAccountAuth.GetServiceAccountEmail();
+
+            if (!string.IsNullOrEmpty(serviceAccountEmail))
+            {
+                EditorGUILayout.HelpBox(
+                    $"각 스프레드시트를 아래 이메일과 공유하세요 (뷰어 이상):\n{serviceAccountEmail}",
+                    MessageType.Info);
+            }
+            else if (!_isEditMode)
+            {
+                EditorGUILayout.HelpBox(
+                    "서비스 계정 JSON 파일의 절대 경로를 지정하면 비공개 스프레드시트도 다운로드할 수 있습니다.",
+                    MessageType.Warning);
             }
 
             EditorGUILayout.Space(5);
@@ -81,66 +114,102 @@ namespace GoogleSpreadSheetLoader.Setting
 
         private void DrawSpreadSheetsInfos()
         {
-            EditorGUILayout.LabelField("스프레드 시트 데이터");
+            EnsureSpreadSheetReorderableList();
+            _spreadSheetReorderableList.displayAdd = _isEditMode;
+            _spreadSheetReorderableList.displayRemove = _isEditMode;
+            _spreadSheetReorderableList.DoLayoutList();
+            EditorGUILayout.Space(5);
+        }
 
-            for (int i = 0; i < _tempSettingData.listSpreadSheetInfo.Count; i++)
+        private void EnsureSpreadSheetReorderableList()
+        {
+            if (_spreadSheetReorderableList != null &&
+                _spreadSheetReorderableList.list == _tempSettingData.listSpreadSheetInfo)
             {
-                var info = _tempSettingData.listSpreadSheetInfo[i];
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"{i + 1}. ", GUILayout.Width(20));
-
-                if (_isEditMode)
-                {
-                    info.spreadSheetName = EditorGUILayout.TextField(info.spreadSheetName, GUILayout.Width(100));
-                    info.spreadSheetId = EditorGUILayout.TextField(info.spreadSheetId);
-
-                    if (GUILayout.Button("삭제", GUILayout.Width(60)))
-                    {
-                        _tempSettingData.listSpreadSheetInfo.RemoveAt(i);
-                        break;
-                    }
-                }
-                else
-                {
-                    EditorGUILayout.LabelField(info.spreadSheetName, GUILayout.Width(100));
-
-                    var displayId = info.spreadSheetId.Length > 10
-                        ? info.spreadSheetId.Substring(0, 10) + "..."
-                        : info.spreadSheetId;
-                    EditorGUILayout.LabelField(displayId);
-
-                    if (GUILayout.Button("열기", GUILayout.Width(60)))
-                    {
-                        Application.OpenURL(string.Format(GSSL_URL.SpreadSheetOpenUrl, info.spreadSheetId, "0"));
-                    }
-                    
-                    // 스프레드시트 단위 최신화 버튼 추가
-                    GUI.enabled = CurrState == eGSSL_State.None;
-                    if (GUILayout.Button("최신화", GUILayout.Width(60)))
-                    {
-                        _ = GSSL_OneButton.OneButtonProcessSingleSpreadSheet(info.spreadSheetId);
-                    }
-                    GUI.enabled = true;
-                }
-
-                EditorGUILayout.EndHorizontal();
+                return;
             }
+
+            _spreadSheetReorderableList = new ReorderableList(
+                _tempSettingData.listSpreadSheetInfo,
+                typeof(SpreadSheetInfo),
+                true,
+                true,
+                true,
+                true)
+            {
+                drawHeaderCallback = rect => EditorGUI.LabelField(rect, "스프레드 시트 데이터"),
+                elementHeight = EditorGUIUtility.singleLineHeight + 4,
+                drawElementCallback = DrawSpreadSheetElement,
+                onAddCallback = list =>
+                {
+                    list.list.Add(new SpreadSheetInfo
+                    {
+                        spreadSheetName = "Name Here",
+                        spreadSheetId = "Id Here",
+                    });
+                },
+                onRemoveCallback = list =>
+                {
+                    if (list.index < 0 || list.index >= list.list.Count)
+                        return;
+
+                    list.list.RemoveAt(list.index);
+                },
+                onReorderCallback = _ =>
+                {
+                    if (!_isEditMode)
+                        SaveSpreadSheetOrder();
+                },
+            };
+        }
+
+        private void DrawSpreadSheetElement(Rect rect, int index, bool isActive, bool isFocused)
+        {
+            var info = _tempSettingData.listSpreadSheetInfo[index];
+            rect.y += 2;
+            rect.height = EditorGUIUtility.singleLineHeight;
 
             if (_isEditMode)
             {
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace();
-                if (GUILayout.Button("스프레드시트 추가", GUILayout.Width(150)))
-                {
-                    _tempSettingData.listSpreadSheetInfo.Add(new SpreadSheetInfo()
-                    { spreadSheetName = "Name Here", spreadSheetId = "Id Here" });
-                }
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.EndHorizontal();
+                var nameRect = new Rect(rect.x, rect.y, 100, rect.height);
+                var idRect = new Rect(rect.x + 105, rect.y, rect.width - 105, rect.height);
+                info.spreadSheetName = EditorGUI.TextField(nameRect, info.spreadSheetName);
+                info.spreadSheetId = EditorGUI.TextField(idRect, info.spreadSheetId);
+                return;
             }
 
-            EditorGUILayout.Space(5);
+            var nameLabelRect = new Rect(rect.x, rect.y, 100, rect.height);
+            var idRectWidth = rect.width - 100 - 130;
+            var idLabelRect = new Rect(rect.x + 105, rect.y, idRectWidth, rect.height);
+            var openRect = new Rect(rect.x + rect.width - 125, rect.y, 60, rect.height);
+            var syncRect = new Rect(rect.x + rect.width - 60, rect.y, 60, rect.height);
+
+            EditorGUI.LabelField(nameLabelRect, info.spreadSheetName);
+
+            var displayId = info.spreadSheetId.Length > 10
+                ? info.spreadSheetId.Substring(0, 10) + "..."
+                : info.spreadSheetId;
+            EditorGUI.LabelField(idLabelRect, displayId);
+
+            if (GUI.Button(openRect, "열기"))
+            {
+                Application.OpenURL(string.Format(GSSL_URL.SpreadSheetOpenUrl, info.spreadSheetId));
+            }
+
+            using (new EditorGUI.DisabledScope(CurrState != eGSSL_State.None))
+            {
+                if (GUI.Button(syncRect, "최신화"))
+                {
+                    _ = GSSL_OneButton.OneButtonProcessSingleSpreadSheet(info.spreadSheetId);
+                }
+            }
+        }
+
+        private void SaveSpreadSheetOrder()
+        {
+            CopySettingData(_tempSettingData, GSSL_Setting.SettingData);
+            EditorUtility.SetDirty(GSSL_Setting.SettingData);
+            AssetDatabase.SaveAssets();
         }
 
         private void DrawSheetSettings()
@@ -257,38 +326,39 @@ namespace GoogleSpreadSheetLoader.Setting
         {
             _tempSettingData = new SettingData();
             CopySettingData(GSSL_Setting.SettingData, _tempSettingData);
+            _spreadSheetReorderableList = null;
         }
 
         private void EnterEditMode()
         {
             _isEditMode = true;
-            // 이미 _tempSettingData가 초기화되어 있으므로 추가 작업 불필요
         }
 
         private void CancelEditMode()
         {
             _isEditMode = false;
-            // 원래 설정으로 복원
             CopySettingData(GSSL_Setting.SettingData, _tempSettingData);
+            _spreadSheetReorderableList = null;
         }
 
         private void ApplyChanges()
         {
-            // 임시 설정을 실제 설정에 적용
             CopySettingData(_tempSettingData, GSSL_Setting.SettingData);
 
-            // ScriptableObject에 저장
             EditorUtility.SetDirty(GSSL_Setting.SettingData);
             AssetDatabase.SaveAssets();
 
+            GSSL_ServiceAccountAuth.ClearCache();
+
             _isEditMode = false;
+            _spreadSheetReorderableList = null;
 
             Debug.Log("설정이 성공적으로 저장되었습니다.");
         }
 
         private void CopySettingData(SettingData source, SettingData target)
         {
-            target.apiKey = source.apiKey;
+            target.serviceAccountJsonPath = source.serviceAccountJsonPath;
             target.sheetTarget = source.sheetTarget;
             target.sheetTargetStr = source.sheetTargetStr;
             target.sheet_enumTypeStr = source.sheet_enumTypeStr;

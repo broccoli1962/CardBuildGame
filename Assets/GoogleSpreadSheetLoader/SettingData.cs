@@ -15,7 +15,7 @@ namespace GoogleSpreadSheetLoader
 
 #pragma warning disable UNT0013 // Remove invalid SerializeField attribute
         [Space(5)]
-        [SerializeField] public string apiKey = "API Key Here";
+        [SerializeField] public string serviceAccountJsonPath = "";
         [SerializeField] public List<SpreadSheetInfo> listSpreadSheetInfo = new List<SpreadSheetInfo>();
 
         [Space(5)]

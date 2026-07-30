@@ -56,5 +56,8 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "CardBuildGame.sln"
+    "dotnet.defaultSolution": "CardBuildGame.sln",
+    "dotrush.roslyn.projectOrSolutionFiles": [
+        "d:\\Unity\\AI_AutoGame\\CardBuildGame\\CardBuildGame\\CardBuildGame.sln"
+    ]
 }

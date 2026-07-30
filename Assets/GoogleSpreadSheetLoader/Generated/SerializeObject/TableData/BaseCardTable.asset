@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e80964d2806c674e900058a9edfa781, type: 3}
+  m_Name: BaseCardTable
+  m_EditorClassIdentifier: Assembly-CSharp::BaseCardTable
+  dataList:
+  - _card_id: atk_01
+    _name_key: card_atk_01_name
+    _desc_key: card_atk_01_desc
+    _card_type: 0
+    _mana_cost: 2
+    _effect_json: '[{"type":"DEAL_DAMAGE","value":3}]'
+    _count: 4
+    _icon_key: Icon_Swords
+  - _card_id: def_01
+    _name_key: card_def_01_name
+    _desc_key: card_def_01_desc
+    _card_type: 1
+    _mana_cost: 2
+    _effect_json: '[{"type":"GAIN_SHIELD","value":3}]'
+    _count: 4
+    _icon_key: Icon_Shield
+  - _card_id: heal_01
+    _name_key: card_heal_01_name
+    _desc_key: card_heal_01_desc
+    _card_type: 2
+    _mana_cost: 1
+    _effect_json: '[{"type":"HEAL_HP","value":1}]'
+    _count: 2
+    _icon_key: Icon_Heal

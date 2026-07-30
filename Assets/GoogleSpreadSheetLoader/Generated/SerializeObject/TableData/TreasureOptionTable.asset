@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ee64a69e15838d4ba4286125a1b89a9, type: 3}
+  m_Name: TreasureOptionTable
+  m_EditorClassIdentifier: Assembly-CSharp::TreasureOptionTable
+  dataList:
+  - _option_id: treasure_mana
+    _name_key: treasure_mana_name
+    _desc_key: treasure_mana_desc
+    _icon_key: Icon_Mana
+    _effect_type: 0
+    _value: 1
+    _threat_ratio: 0
+  - _option_id: treasure_life
+    _name_key: treasure_life_name
+    _desc_key: treasure_life_desc
+    _icon_key: Icon_Heart
+    _effect_type: 1
+    _value: 3
+    _threat_ratio: 0
+  - _option_id: treasure_blank
+    _name_key: treasure_blank_name
+    _desc_key: treasure_blank_desc
+    _icon_key: Icon_Special
+    _effect_type: 2
+    _value: 1
+    _threat_ratio: 0.5

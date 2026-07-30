@@ -1,0 +1,117 @@
+[
+  [
+    "key-string",
+    "value-float",
+    "desc-string"
+  ],
+  [
+    "mana_cost_multiplier",
+    "1.5",
+    "CPS 산식에서 mana_cost에 곱해 차감하는 계수"
+  ],
+  [
+    "usability_factor_normal",
+    "1",
+    "mana_cost <= max_mana 일 때 사용 가능성 계수"
+  ],
+  [
+    "usability_factor_mana_over",
+    "0.5",
+    "mana_cost > max_mana 일 때 사용 가능성 계수"
+  ],
+  [
+    "player_start_hp",
+    "10",
+    "플레이어 시작 체력"
+  ],
+  [
+    "player_start_max_hp",
+    "10",
+    "플레이어 시작 최대 체력"
+  ],
+  [
+    "player_start_max_mana",
+    "10",
+    "플레이어 시작 최대 마나"
+  ],
+  [
+    "hand_size",
+    "5",
+    "항상 유지되는 손패 장수"
+  ],
+  [
+    "base_deck_limit",
+    "10",
+    "기본 덱 최대 수량"
+  ],
+  [
+    "deck_min_size",
+    "5",
+    "정화 가능 최소 덱 크기"
+  ],
+  [
+    "card_name_max_length",
+    "8",
+    "생성 카드 이름 최대 길이"
+  ],
+  [
+    "card_desc_max_length",
+    "100",
+    "생성 카드 설명 최대 길이"
+  ],
+  [
+    "card_mana_cost_max",
+    "15",
+    "카드 마나 비용 상한"
+  ],
+  [
+    "hp_mult_cap",
+    "2.2",
+    "몬스터 체력 배수 하드 캡"
+  ],
+  [
+    "atk_mult_cap",
+    "1.5",
+    "몬스터 공격력 배수 하드 캡"
+  ],
+  [
+    "boss_atk_mult_cap",
+    "1.35",
+    "보스 전용 공격력 배수 하드 캡"
+  ],
+  [
+    "enemy_turn_delay",
+    "1.4",
+    "적 턴 연출 대기 시간(초)"
+  ],
+  [
+    "llm_timeout",
+    "15",
+    "로컬 LLM 호출 타임아웃(초)"
+  ],
+  [
+    "llm_temperature",
+    "0.7",
+    "로컬 LLM temperature"
+  ],
+  [
+    "map_gen_max_retry",
+    "20",
+    "맵 생성 가드레일 검증 실패 시 최대 재시도 횟수"
+  ],
+  [
+    "map_floor_count",
+    "5",
+    "챕터당 층 수"
+  ],
+  [
+    "elite_bonus_max_hp",
+    "2",
+    "정예 클리어 시 최대 체력 증가량"
+  ],
+  [
+    "blank_card_threat_ratio",
+    "0.5",
+    "보물 백지 카드의 위협도 가산 비율"
+  ]
+]

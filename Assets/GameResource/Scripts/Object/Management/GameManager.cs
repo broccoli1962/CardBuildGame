@@ -1,3 +1,4 @@
+using Backend.Object.GameSystems.Llm;
 using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
 using R3;
@@ -18,6 +19,7 @@ namespace Backend.Object.Management
         {
             await AudioManager.InitMixer();
             TableManager.Init();
+            LocalLlmManager.EnsureInitialized();
         }
 
         private void StartGameplay_Internal()

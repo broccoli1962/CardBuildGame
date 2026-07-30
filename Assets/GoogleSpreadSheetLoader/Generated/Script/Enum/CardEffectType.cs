@@ -1,0 +1,14 @@
+
+
+public enum CardEffectType
+{
+	DEAL_DAMAGE = 0,
+	GAIN_SHIELD = 1,
+	HEAL_HP = 2,
+	PLAYER_HP_CHANGE = 3,
+	MANA_RECOVER = 4,
+	MAX_MANA_CHANGE = 5,
+	SET_INVULNERABLE = 6,
+	FREE_NEXT_CARD = 7,
+	GAIN_MANA_FROM_HP = 8,
+}

@@ -146,13 +146,13 @@ namespace GoogleSpreadSheetLoader.Setting
             
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField($"스프레드시트: {cacheInfo.spreadSheetName}", GUILayout.Width(200));
-            EditorGUILayout.LabelField($"최종 업데이트: {cacheInfo.lastUpdated:yyyy-MM-dd HH:mm}", GUILayout.Width(150));
+            EditorGUILayout.LabelField($"최종 업데이트: {cacheInfo.LastUpdatedDateTime:yyyy-MM-dd HH:mm}", GUILayout.Width(150));
             GUILayout.FlexibleSpace();
             
             // 개별 액션 버튼들
             if (GUILayout.Button("열기", GUILayout.Width(50)))
             {
-                Application.OpenURL(string.Format(GSSL_URL.SpreadSheetOpenUrl, cacheInfo.spreadSheetId, "0"));
+                Application.OpenURL(string.Format(GSSL_URL.SpreadSheetOpenUrl, cacheInfo.spreadSheetId));
             }
             
             if (GUILayout.Button("삭제", GUILayout.Width(50)))

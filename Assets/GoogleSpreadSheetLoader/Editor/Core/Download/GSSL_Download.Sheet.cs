@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GoogleSpreadSheetLoader.Auth;
 using GoogleSpreadSheetLoader.Setting;
 using Newtonsoft.Json.Linq;
 using UnityEditor;
@@ -67,79 +68,42 @@ namespace GoogleSpreadSheetLoader.Download
         
         private static async Awaitable<bool> TryDownloadSheet(List<RequestInfo> listDownloadInfo, CancellationToken cancellationToken = default)
         {
-            // 실패한 요청들만 재시도
-            var failedRequests = listDownloadInfo.Where(x => x.HasError && x.CanRetry).ToList();
-            
-            if (failedRequests.Any())
-            {
-                Debug.LogWarning($"실패한 시트 {failedRequests.Count}개 재시도 중...");
-                
-                // 모든 실패한 요청을 병렬로 재시도
-                var retryTasks = failedRequests.Select(request => request.RetryAsync(cancellationToken)).ToArray();
-                await Task.WhenAll(retryTasks);
-            }
-            else
-            {
-                // 모든 요청 시작
-                foreach (var info in listDownloadInfo)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    
-                    if (!info.IsDisposed)
-                    {
-                        info.SendAndGetAsyncOperation();
-                    }
-                }
-            }
-
-            // 모든 요청이 완료될 때까지 대기 (첫 번째 실행과 재시도 공통)
-            var totalCount = listDownloadInfo.Count;
-            var isRetry = failedRequests.Any();
-            do
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                
-                string progressString = $"({listDownloadInfo.Count(x => x.IsDone)}/{totalCount})";
-                string statusSuffix = isRetry ? " (재시도 중)" : "";
-                SetProgressState(eGSSL_State.DownloadingSheet, progressString + statusSuffix);
-                EditorWindow.focusedWindow?.Repaint();
-                await Task.Delay(100, cancellationToken);
-            } while (listDownloadInfo.Any(x => !x.IsDone && !x.IsDisposed));
-
-            {
-                string progressString = $"(Done)";
-                SetProgressState(eGSSL_State.DownloadingSheet, progressString);
-                EditorWindow.focusedWindow?.Repaint();
-                await Task.Delay(500, cancellationToken);
-            }
-
-            // 다운로드 완료 후 에러 체크
-            var errorInfos = listDownloadInfo.Where(x => x.HasError && !x.IsDisposed).ToList();
-            if (errorInfos.Any())
-            {
-                var errorMessage = "시트 다운로드 중 에러가 발생했습니다:\n";
-                foreach (var errorInfo in errorInfos)
-            {
-                    errorMessage += $"• {errorInfo.SheetName}: {errorInfo.ErrorMessage} (재시도: {errorInfo.RetryCount}회)\n";
-                }
-                
-                Debug.LogError(errorMessage);
-                return false; // 실패
-            }
+            var accessToken = await GSSL_ServiceAccountAuth.GetAccessTokenAsync(cancellationToken);
 
             GSSL_DownloadedSheet.ClearAllSheetData();
 
-            foreach (var info in listDownloadInfo)
+            using var httpClient = new System.Net.Http.HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization =
+                new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+
+            for (var i = 0; i < listDownloadInfo.Count; i++)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                
-                if (info.IsDisposed) continue;
-                
+                var info = listDownloadInfo[i];
+                if (info.IsDisposed)
+                    continue;
+
+                string progressString = $"({i + 1}/{listDownloadInfo.Count})";
+                SetProgressState(eGSSL_State.DownloadingSheet, progressString);
+                EditorWindow.focusedWindow?.Repaint();
+
                 try
                 {
-                    SheetData sheetData = new SheetData();
-                    sheetData.spreadSheetId = info.SpreadSheetId;
-                    sheetData.title = info.SheetName;
+                    var encodedSheetName = Uri.EscapeDataString(info.SheetName);
+                    var url = string.Format(GSSL_URL.DownloadSheetUrl, info.SpreadSheetId, encodedSheetName);
+                    using var response = await httpClient.GetAsync(url, cancellationToken);
+                    var downloadText = await response.Content.ReadAsStringAsync();
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        Debug.LogError($"시트 다운로드 실패 - {info.SheetName}: {(int)response.StatusCode} {response.ReasonPhrase}\n{downloadText}");
+                        return false;
+                    }
+
+                    var sheetData = new SheetData
+                    {
+                        spreadSheetId = info.SpreadSheetId,
+                        title = info.SheetName
+                    };
 
                     if (sheetData.title.Contains(GSSL_Setting.SettingData.sheet_enumTypeStr))
                         sheetData.tableStyle = SheetData.eTableStyle.EnumType;
@@ -148,41 +112,41 @@ namespace GoogleSpreadSheetLoader.Download
                     else
                         sheetData.tableStyle = SheetData.eTableStyle.Common;
 
-                    JObject jObj = JObject.Parse(info.DownloadText);
+                    JObject jObj = JObject.Parse(downloadText);
 
                     if (!jObj.TryGetValue("values", out var values))
                     {
-                        Debug.LogError($"변환 실패 - {info.SheetName}\n"
-                                       + $"{info.URL}\n"
-                                       + $"{info.DownloadText}");
-
-                        continue;
+                        Debug.LogError($"변환 실패 - {info.SheetName}\n{url}\n{downloadText}");
+                        return false;
                     }
 
                     sheetData.data = values.ToString();
-
                     GSSL_DownloadedSheet.AddSheetData(sheetData);
-                    
-                    // 캐시에 저장
+
                     var spreadSheetInfo = GSSL_Setting.SettingData.listSpreadSheetInfo
-                        .FirstOrDefault(x => x.spreadSheetId == info.SpreadSheetId);
+                        ?.FirstOrDefault(x => x.spreadSheetId == info.SpreadSheetId);
                     var spreadSheetName = spreadSheetInfo?.spreadSheetName ?? "Unknown";
-                    
+
                     GSSL_CacheManager.SaveSheetToCache(
-                        info.SpreadSheetId, 
-                        spreadSheetName, 
-                        info.SheetName, 
-                        sheetData.data, 
+                        info.SpreadSheetId,
+                        spreadSheetName,
+                        info.SheetName,
+                        sheetData.data,
                         sheetData.tableStyle);
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
                     Debug.LogError($"시트 데이터 처리 중 에러 발생 - {info.SheetName}: {ex.Message}");
-                    return false; // 실패
+                    return false;
                 }
             }
-            
-            return true; // 성공
+
+            {
+                SetProgressState(eGSSL_State.DownloadingSheet, "(Done)");
+                EditorWindow.focusedWindow?.Repaint();
+            }
+
+            return true;
         }
         
         public static async Awaitable DownloadIndividualSheets(List<string> sheetNames, CancellationToken cancellationToken = default)
