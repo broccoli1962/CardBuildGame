@@ -64,18 +64,26 @@ namespace GoogleSpreadSheetLoader.Generate
                     continue;
                 }
                 
-                var dic = new Dictionary<string, string>();
+                var localizeList = new List<LocalizeKeyValue>();
+                var usedIds = new HashSet<string>();
                 var targetList = dicLocalize[idx];
                 
                 for (var i = 0; i < idList.Count; i++)
                 {
-                    if (!dic.TryAdd(idList[i], targetList[i]))
+                    if (!usedIds.Add(idList[i]))
                     {
-                        Debug.LogError($"중복 키 - {idList[i]}");
+                        Debug.LogError($"Duplicate localize id - {idList[i]}");
+                        continue;
                     }
+
+                    localizeList.Add(new LocalizeKeyValue
+                    {
+                        Key = idList[i],
+                        Value = targetList[i]
+                    });
                 }
 
-                var contents = JsonConvert.SerializeObject(dic);
+                var contents = JsonConvert.SerializeObject(localizeList);
                 
                 File.WriteAllText(localizePath + $"Localize_{header}.json", contents);
             }

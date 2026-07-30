@@ -1,0 +1,34 @@
+[
+  [
+    "option_id-string",
+    "name_key-string",
+    "desc_key-string",
+    "icon_key-string",
+    "effect_type-RestOptionType",
+    "value-float"
+  ],
+  [
+    "rest_heal",
+    "rest_heal_name",
+    "rest_heal_desc",
+    "Icon_Heart",
+    "Rest",
+    "0.5"
+  ],
+  [
+    "rest_purge",
+    "rest_purge_name",
+    "rest_purge_desc",
+    "Icon_Special",
+    "Purge",
+    "1"
+  ],
+  [
+    "rest_sigil",
+    "rest_sigil_name",
+    "rest_sigil_desc",
+    "Icon_Mana",
+    "Sigil",
+    "1"
+  ]
+]

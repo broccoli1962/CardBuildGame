@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09dd0fff6c93aa542bb3eed2aed3b192, type: 3}
+  m_Name: CardPowerWeightTable
+  m_EditorClassIdentifier: Assembly-CSharp::CardPowerWeightTable
+  dataList:
+  - _effect_type: 0
+    _weight: 1
+    _flat_bonus: 0
+  - _effect_type: 1
+    _weight: 0.8
+    _flat_bonus: 0
+  - _effect_type: 2
+    _weight: 1.2
+    _flat_bonus: 0
+  - _effect_type: 4
+    _weight: 1.5
+    _flat_bonus: 0
+  - _effect_type: 5
+    _weight: 3
+    _flat_bonus: 0
+  - _effect_type: 3
+    _weight: 1
+    _flat_bonus: 0
+  - _effect_type: 6
+    _weight: 0
+    _flat_bonus: 8
+  - _effect_type: 7
+    _weight: 0
+    _flat_bonus: 6
+  - _effect_type: 8
+    _weight: 0
+    _flat_bonus: 7

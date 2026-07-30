@@ -18,7 +18,7 @@ namespace Backend.Object.Management
 
         private async UniTaskVoid EnterAsync()
         {
-            await Boot.WaitUntilReadyAsync();
+            //await Boot.WaitUntilReadyAsync();
             await OnEnterAsync();
         }
 

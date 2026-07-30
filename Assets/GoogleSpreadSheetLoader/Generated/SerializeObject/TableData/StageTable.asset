@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f68d0bc2f623cd14c85d8e0df7e86c0a, type: 3}
+  m_Name: StageTable
+  m_EditorClassIdentifier: Assembly-CSharp::StageTable
+  dataList:
+  - _stage_id: stage_1_1
+    _chapter: 1
+    _floor: 1
+    _monster_pool: slime_01
+    _is_boss: 0
+  - _stage_id: stage_1_2
+    _chapter: 1
+    _floor: 2
+    _monster_pool: goblin_01
+    _is_boss: 0
+  - _stage_id: stage_1_3
+    _chapter: 1
+    _floor: 3
+    _monster_pool: orc_chief_01
+    _is_boss: 0
+  - _stage_id: stage_1_4
+    _chapter: 1
+    _floor: 4
+    _monster_pool: wraith_knight_01
+    _is_boss: 0
+  - _stage_id: stage_1_5
+    _chapter: 1
+    _floor: 5
+    _monster_pool: dragon_boss_01
+    _is_boss: 1

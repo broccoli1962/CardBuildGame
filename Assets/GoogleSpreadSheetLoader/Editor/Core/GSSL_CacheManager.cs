@@ -15,12 +15,33 @@ namespace GoogleSpreadSheetLoader
         [Serializable]
         public class CacheInfo
         {
+            private const string LastUpdatedFormat = "o";
+
             public string spreadSheetId;
             public string spreadSheetName;
             public string sheetName;
             public string fileName;
-            public DateTime lastUpdated;
+            // JsonUtility는 DateTime을 직렬화하지 않으므로 문자열로 저장한다.
+            public string lastUpdated;
             public SheetData.eTableStyle tableStyle;
+
+            public DateTime LastUpdatedDateTime
+            {
+                get
+                {
+                    if (string.IsNullOrEmpty(lastUpdated))
+                        return DateTime.MinValue;
+
+                    return DateTime.TryParse(
+                        lastUpdated,
+                        null,
+                        System.Globalization.DateTimeStyles.RoundtripKind,
+                        out var parsed)
+                        ? parsed
+                        : DateTime.MinValue;
+                }
+                set => lastUpdated = value.ToString(LastUpdatedFormat);
+            }
         }
         
         [Serializable]
@@ -101,10 +122,23 @@ namespace GoogleSpreadSheetLoader
                     var filePath = Path.Combine(CacheDirectory, info.fileName);
                     return File.Exists(filePath);
                 }).ToList();
-                
-                if (validCacheInfos.Count != cacheIndex.cacheInfos.Count)
+
+                var needsSave = validCacheInfos.Count != cacheIndex.cacheInfos.Count;
+
+                // JsonUtility DateTime 미지원으로 과거 인덱스에 lastUpdated가 비어 있을 수 있다.
+                // 캐시 파일의 수정 시각으로 보완한다.
+                foreach (var info in validCacheInfos)
                 {
-                    // 유효하지 않은 항목들이 있었으면 인덱스 업데이트
+                    if (!string.IsNullOrEmpty(info.lastUpdated))
+                        continue;
+
+                    var filePath = Path.Combine(CacheDirectory, info.fileName);
+                    info.LastUpdatedDateTime = File.GetLastWriteTime(filePath);
+                    needsSave = true;
+                }
+                
+                if (needsSave)
+                {
                     cacheIndex.cacheInfos = validCacheInfos;
                     SaveCacheIndex(cacheIndex);
                 }
@@ -177,15 +211,16 @@ namespace GoogleSpreadSheetLoader
             cacheIndex.cacheInfos.RemoveAll(info => info.sheetName == sheetName);
             
             // 새 항목 추가
-            cacheIndex.cacheInfos.Add(new CacheInfo
+            var cacheInfo = new CacheInfo
             {
                 spreadSheetId = spreadSheetId,
                 spreadSheetName = spreadSheetName,
                 sheetName = sheetName,
                 fileName = fileName,
-                lastUpdated = DateTime.Now,
                 tableStyle = tableStyle
-            });
+            };
+            cacheInfo.LastUpdatedDateTime = DateTime.Now;
+            cacheIndex.cacheInfos.Add(cacheInfo);
             
             SaveCacheIndex(cacheIndex);
         }
