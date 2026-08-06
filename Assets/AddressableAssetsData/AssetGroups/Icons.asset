@@ -10,33 +10,43 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: UI
+  m_Name: Icons
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
-  m_GroupName: UI
-  m_GUID: b48e10bce2f495d47ae298b92231fb02
+  m_GroupName: Icons
+  m_GUID: 604df4789d64db941bb70af23f543427
   m_SerializeEntries:
-  - m_GUID: 827e91b86f057204cb735e344071d5c2
-    m_Address: UI/MapPanel.prefab
+  - m_GUID: 2ffa47a7e4c1f70449b2622ae190dafd
+    m_Address: Icons/Node_Event.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8b8f1b3301d4992499ea949aac0796c4
-    m_Address: UI/CardCreationPanel.prefab
+  - m_GUID: 436b3fdf6436ff541addaf054905a657
+    m_Address: Icons/Node_Battle.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9c633a976900ec2458405924c966ffdc
-    m_Address: UI/MapPreviewPopup.prefab
+  - m_GUID: 494c4f446f26b2c49bd69d205c18eac8
+    m_Address: Icons/Node_Rest.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b1a40095b30c0a84ba3252f30aa694b0
-    m_Address: UI/DeckInspectPopup.prefab
+  - m_GUID: 8690553c120789b49a615f97f2e62113
+    m_Address: Icons/Node_Treasure.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: be0a28a6dd994184da2f304cfccfdfc8
-    m_Address: UI
+  - m_GUID: 9ba0c67e8331d234e899e7fdb3d4580c
+    m_Address: Icons/Node_Boss.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dff1656a364d68d40a933ac53d3fc921
+    m_Address: Icons/Node_Elite.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f89c2b2a5e4beeb4ca5865822d6d6675
+    m_Address: Icons
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -44,5 +54,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: 65d5b10e0064b1f439d7cef7f799dc5f, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 76db5c97e2fd1f243b049465fbcbf791, type: 2}
-    - {fileID: 11400000, guid: ee06a4d864edd414697115d97f47317b, type: 2}
+    - {fileID: 11400000, guid: 9d40243c306a0434ba04235d97aa2c62, type: 2}
+    - {fileID: 11400000, guid: eba9b0a593d80ec4b9525b38dfca0057, type: 2}
