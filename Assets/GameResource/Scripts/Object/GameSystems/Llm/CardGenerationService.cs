@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Backend.Object.GameSystems.Gameplay;
 using Backend.Object.Management;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
@@ -94,13 +95,18 @@ namespace Backend.Object.GameSystems.Llm
                 "Schema:\n" +
                 "{\n" +
                 "  \"name\": \"8 chars max Korean name\",\n" +
-                "  \"description\": \"100 chars max Korean description\",\n" +
+                "  \"description\": \"100 chars max Korean description; include 단일 and/or 광역 when dealing damage\",\n" +
                 "  \"card_type\": \"attack|defense|heal|special\",\n" +
                 "  \"mana_cost\": 0-15 integer,\n" +
-                "  \"effects\": [{\"type\":\"DEAL_DAMAGE|GAIN_SHIELD|HEAL_HP|PLAYER_HP_CHANGE|MANA_RECOVER|MAX_MANA_CHANGE|SET_INVULNERABLE|FREE_NEXT_CARD|GAIN_MANA_FROM_HP\",\"value\":number}]\n" +
+                "  \"effects\": [{\"type\":\"DEAL_DAMAGE|GAIN_SHIELD|HEAL_HP|PLAYER_HP_CHANGE|MANA_RECOVER|MAX_MANA_CHANGE|SET_INVULNERABLE|FREE_NEXT_CARD|GAIN_MANA_FROM_HP\",\"value\":number,\"target\":\"single|aoe\"}]\n" +
                 "}\n" +
                 "Rules:\n" +
                 "- Use only allowed effect types.\n" +
+                "- DEAL_DAMAGE must set target: single (one enemy) or aoe (all enemies). Default single if omitted.\n" +
+                "- target is only meaningful for DEAL_DAMAGE; omit it for other types.\n" +
+                "- If request implies area/splash/all enemies, use aoe and write 광역 in description.\n" +
+                "- If request implies one enemy/focus, use single and write 단일 in description.\n" +
+                "- A card may mix single and aoe DEAL_DAMAGE effects.\n" +
                 "- DEAL_DAMAGE over 15 requires PLAYER_HP_CHANGE penalty.\n" +
                 "- image_path is always assets/cards/joker.png.\n" +
                 $"Player request: {concept}";
@@ -163,14 +169,23 @@ namespace Backend.Object.GameSystems.Llm
                 if (!TableManager.IsAllowedEffectType(effectType))
                     continue;
 
+                var target = effectType == CardEffectType.DEAL_DAMAGE
+                    ? ParseDamageTarget(effect.target)
+                    : DamageTargetType.Single;
+
                 card.effects.Add(new GeneratedCardEffect
                 {
                     type = effectType,
-                    value = TableManager.ClampEffectValue(effectType, effect.value)
+                    value = TableManager.ClampEffectValue(effectType, effect.value),
+                    target = target
                 });
             }
 
             ApplyDamagePenaltyRule(card);
+            card.description = Trim(
+                CardDescriptionFormatter.EnsureDamageFormKeywords(card.description, card.effects),
+                maxDesc,
+                "AI가 생성한 카드");
             return card;
         }
 
@@ -200,6 +215,18 @@ namespace Backend.Object.GameSystems.Llm
                 type = CardEffectType.PLAYER_HP_CHANGE,
                 value = TableManager.ClampEffectValue(CardEffectType.PLAYER_HP_CHANGE, -3)
             });
+        }
+
+        private static DamageTargetType ParseDamageTarget(string raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw))
+                return DamageTargetType.Single;
+
+            return raw.Trim().ToLowerInvariant() switch
+            {
+                "aoe" or "area" or "all" or "광역" => DamageTargetType.Aoe,
+                _ => DamageTargetType.Single,
+            };
         }
 
         private static CardType ParseCardType(string cardType)
@@ -237,6 +264,7 @@ namespace Backend.Object.GameSystems.Llm
         {
             public string type;
             public int value;
+            public string target;
         }
     }
 }
