@@ -13,7 +13,7 @@
   [
     "Battle",
     "node_battle_name",
-    "Node_StageActive",
+    "Node_Battle",
     "node_battle_desc",
     "TRUE",
     "1",
@@ -24,7 +24,7 @@
   [
     "Elite",
     "node_elite_name",
-    "Node_StageActive",
+    "Node_Elite",
     "node_elite_desc",
     "TRUE",
     "1",
@@ -35,7 +35,7 @@
   [
     "Rest",
     "node_rest_name",
-    "Node_StageInactive",
+    "Node_Rest",
     "node_rest_desc",
     "FALSE",
     "0",
@@ -46,7 +46,7 @@
   [
     "Event",
     "node_event_name",
-    "Node_StageInactive",
+    "Node_Event",
     "node_event_desc",
     "FALSE",
     "0",
@@ -57,7 +57,7 @@
   [
     "Treasure",
     "node_treasure_name",
-    "Node_StageInactive",
+    "Node_Treasure",
     "node_treasure_desc",
     "FALSE",
     "0",

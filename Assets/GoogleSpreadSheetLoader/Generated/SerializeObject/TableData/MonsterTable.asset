@@ -17,29 +17,29 @@ MonoBehaviour:
     _name_key: monster_slime_01
     _max_hp: 5
     _base_attack: 3
-    _icon_key: Icon_EnemySkull
+    _icon_key: Monster_Slime
     _is_boss: 0
   - _monster_id: goblin_01
     _name_key: monster_goblin_01
     _max_hp: 12
     _base_attack: 4
-    _icon_key: Icon_EnemySkull
+    _icon_key: Monster_Goblin
     _is_boss: 0
   - _monster_id: orc_chief_01
     _name_key: monster_orc_chief_01
     _max_hp: 22
     _base_attack: 6
-    _icon_key: Icon_EnemySkull
+    _icon_key: Monster_OrcChief
     _is_boss: 0
   - _monster_id: wraith_knight_01
     _name_key: monster_wraith_knight_01
     _max_hp: 35
     _base_attack: 8
-    _icon_key: Icon_EnemySkull
+    _icon_key: Monster_WraithKnight
     _is_boss: 0
   - _monster_id: dragon_boss_01
     _name_key: monster_dragon_boss_01
     _max_hp: 80
     _base_attack: 12
-    _icon_key: Node_Boss
+    _icon_key: Monster_DragonBoss
     _is_boss: 1

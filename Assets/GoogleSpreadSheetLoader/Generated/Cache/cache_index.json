@@ -3,14 +3,6 @@
         {
             "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
             "spreadSheetName": "Name Here",
-            "sheetName": "Monster",
-            "fileName": "Monster.txt",
-            "lastUpdated": "2026-07-30T16:56:17.6970908+09:00",
-            "tableStyle": 0
-        },
-        {
-            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
-            "spreadSheetName": "Name Here",
             "sheetName": "Stage",
             "fileName": "Stage.txt",
             "lastUpdated": "2026-07-30T16:56:18.2460888+09:00",
@@ -54,14 +46,6 @@
             "sheetName": "CardEffectType",
             "fileName": "CardEffectType.txt",
             "lastUpdated": "2026-07-30T16:56:20.2910900+09:00",
-            "tableStyle": 0
-        },
-        {
-            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
-            "spreadSheetName": "Name Here",
-            "sheetName": "MapNodeType",
-            "fileName": "MapNodeType.txt",
-            "lastUpdated": "2026-07-30T16:56:20.6780900+09:00",
             "tableStyle": 0
         },
         {
@@ -127,6 +111,22 @@
             "fileName": "GeneralGameStringLocalization.txt",
             "lastUpdated": "2026-07-30T16:56:23.9600889+09:00",
             "tableStyle": 2
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "Monster",
+            "fileName": "Monster.txt",
+            "lastUpdated": "2026-08-04T16:55:15.1075172+09:00",
+            "tableStyle": 0
+        },
+        {
+            "spreadSheetId": "1Dg-7PNCDaiE3Axtc4mRMEmk90OhTE7tD-s2XXcxAhNM",
+            "spreadSheetName": "Name Here",
+            "sheetName": "MapNodeType",
+            "fileName": "MapNodeType.txt",
+            "lastUpdated": "2026-08-05T21:37:26.0195459+09:00",
+            "tableStyle": 0
         }
     ]
 }

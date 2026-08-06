@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Backend.Object.GameSystems.Gameplay;
 
 namespace Backend.Object.GameSystems.Llm
 {
@@ -8,6 +9,10 @@ namespace Backend.Object.GameSystems.Llm
     {
         public CardEffectType type;
         public int value;
+        /// <summary>
+        /// DEAL_DAMAGE 전용. 그 외 타입에서는 무시됩니다.
+        /// </summary>
+        public DamageTargetType target = DamageTargetType.Single;
     }
 
     /// <summary>
