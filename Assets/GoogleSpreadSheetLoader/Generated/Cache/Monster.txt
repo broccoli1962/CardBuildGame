@@ -12,7 +12,7 @@
     "monster_slime_01",
     "5",
     "3",
-    "Icon_EnemySkull",
+    "Monster_Slime",
     "FALSE"
   ],
   [
@@ -20,7 +20,7 @@
     "monster_goblin_01",
     "12",
     "4",
-    "Icon_EnemySkull",
+    "Monster_Goblin",
     "FALSE"
   ],
   [
@@ -28,7 +28,7 @@
     "monster_orc_chief_01",
     "22",
     "6",
-    "Icon_EnemySkull",
+    "Monster_OrcChief",
     "FALSE"
   ],
   [
@@ -36,7 +36,7 @@
     "monster_wraith_knight_01",
     "35",
     "8",
-    "Icon_EnemySkull",
+    "Monster_WraithKnight",
     "FALSE"
   ],
   [
@@ -44,7 +44,7 @@
     "monster_dragon_boss_01",
     "80",
     "12",
-    "Node_Boss",
+    "Monster_DragonBoss",
     "TRUE"
   ]
 ]

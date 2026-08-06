@@ -15,7 +15,7 @@ MonoBehaviour:
   dataList:
   - _node_type: 0
     _name_key: node_battle_name
-    _icon_key: Node_StageActive
+    _icon_key: Node_Battle
     _desc_key: node_battle_desc
     _has_battle: 1
     _gen_count: 1
@@ -24,7 +24,7 @@ MonoBehaviour:
     _color_hex: '#e53e3e'
   - _node_type: 1
     _name_key: node_elite_name
-    _icon_key: Node_StageActive
+    _icon_key: Node_Elite
     _desc_key: node_elite_desc
     _has_battle: 1
     _gen_count: 1
@@ -33,7 +33,7 @@ MonoBehaviour:
     _color_hex: '#b91c1c'
   - _node_type: 2
     _name_key: node_rest_name
-    _icon_key: Node_StageInactive
+    _icon_key: Node_Rest
     _desc_key: node_rest_desc
     _has_battle: 0
     _gen_count: 0
@@ -42,7 +42,7 @@ MonoBehaviour:
     _color_hex: '#f97316'
   - _node_type: 3
     _name_key: node_event_name
-    _icon_key: Node_StageInactive
+    _icon_key: Node_Event
     _desc_key: node_event_desc
     _has_battle: 0
     _gen_count: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
     _color_hex: '#9f7aea'
   - _node_type: 4
     _name_key: node_treasure_name
-    _icon_key: Node_StageInactive
+    _icon_key: Node_Treasure
     _desc_key: node_treasure_desc
     _has_battle: 0
     _gen_count: 0
