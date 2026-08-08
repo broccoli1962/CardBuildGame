@@ -114,3 +114,7 @@ InitTestScene*.unity*
 /Docs/StreamingAssets/Models/*.gguf
 /Docs/StreamingAssets/Models/*.gguf.meta
 
+
+# GSSL local credentials (service account path / sheet config)
+/Assets/GoogleSpreadSheetLoader/SettingData.asset
+
