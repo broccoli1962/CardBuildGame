@@ -115,7 +115,7 @@ namespace Backend.Object.UI
 
             var elite = CardCreationSystem.IsEliteDraft;
             View.SetHeader(
-                elite ? "☠️ 정예 보상 — AI 카드 생성" : "🃏 AI 카드 생성",
+                elite ? "정예 보상 — AI 카드 생성" : "AI 카드 생성",
                 elite
                     ? "원하는 카드를 묘사하세요. 후보 2장 중 한 장만 가져갈 수 있습니다."
                     : "원하는 카드를 자유롭게 묘사하세요. AI가 게임 밸런스에 맞춰 생성합니다.");
@@ -139,8 +139,8 @@ namespace Backend.Object.UI
             CardCreationSystem.GetThreatPreview(out var curThreat, out var nextThreat, out var curTier, out var nextTier);
             var cps = selected.power_score;
             var threatLine = cps <= 0.01f
-                ? "☠ 위협도 변화 없음"
-                : $"☠ 위협도  {curThreat:0.#} → {nextThreat:0.#}   (Tier {curTier} → {nextTier})";
+                ? "위협도 변화 없음"
+                : $"위협도  {curThreat:0.#} → {nextThreat:0.#}   (Tier {curTier} → {nextTier})";
 
             var description = CardDescriptionFormatter.EnsureDamageFormKeywords(
                 selected.description,
@@ -157,8 +157,8 @@ namespace Backend.Object.UI
                 var b = CardCreationSystem.Candidates[1];
                 var sel = CardCreationSystem.SelectedIndex;
                 View.SetCandidateLabels(
-                    $"{(sel == 0 ? "▶ " : "")}{a.name} (CPS {a.power_score:0.#})",
-                    $"{(sel == 1 ? "▶ " : "")}{b.name} (CPS {b.power_score:0.#})");
+                    $"{(sel == 0 ? "> " : "")}{a.name} (CPS {a.power_score:0.#})",
+                    $"{(sel == 1 ? "> " : "")}{b.name} (CPS {b.power_score:0.#})");
             }
         }
     }

@@ -15,36 +15,6 @@ MonoBehaviour:
   m_GroupName: Icons
   m_GUID: 604df4789d64db941bb70af23f543427
   m_SerializeEntries:
-  - m_GUID: 2ffa47a7e4c1f70449b2622ae190dafd
-    m_Address: Icons/Node_Event.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 436b3fdf6436ff541addaf054905a657
-    m_Address: Icons/Node_Battle.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 494c4f446f26b2c49bd69d205c18eac8
-    m_Address: Icons/Node_Rest.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8690553c120789b49a615f97f2e62113
-    m_Address: Icons/Node_Treasure.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9ba0c67e8331d234e899e7fdb3d4580c
-    m_Address: Icons/Node_Boss.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: dff1656a364d68d40a933ac53d3fc921
-    m_Address: Icons/Node_Elite.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f89c2b2a5e4beeb4ca5865822d6d6675
     m_Address: Icons
     m_ReadOnly: 0

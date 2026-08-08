@@ -13,7 +13,15 @@ namespace Backend.Util.Management
         // Since Unity removes objects in random order at this time, when the singleton object is already removed and
         // approaches the singleton object from the outside, the singleton object is created again.
         // So to prevent this, we add a flag to check if the singleton object is being removed.
+        // IMPORTANT: Do NOT set this in OnDestroy — destroying a duplicate singleton (e.g. scene-placed
+        // TableManager when returning to Lobby) would poison every SingletonGameObject.Instance.
         protected static bool IsQuitting;
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetStatics()
+        {
+            IsQuitting = false;
+        }
 
         protected virtual void Awake()
         {
@@ -33,17 +41,15 @@ namespace Backend.Util.Management
             OnStart();
         }
 
-        private void OnDestroy()
+        protected virtual void OnDestroy()
         {
-            IsQuitting = true;
-
             if (isPersistent)
             {
                 UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
             }
         }
 
-        private void OnApplicationQuit()
+        protected virtual void OnApplicationQuit()
         {
             IsQuitting = true;
         }

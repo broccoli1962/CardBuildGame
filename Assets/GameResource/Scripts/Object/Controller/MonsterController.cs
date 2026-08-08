@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Backend.AddressableKey;
 using Backend.Object.GameSystems.Gameplay;
 using Backend.Object.Management;
@@ -15,6 +17,8 @@ namespace Backend.Object.Controller
         private Pooling<Monster> _pool;
         private Monster _activeMonsterCard;
         private CompositeDisposable _disposables;
+        private CancellationTokenSource _lifetimeCts;
+        private bool _isPlayingDeath;
 
         /// <summary>
         /// 몬스터 카드 풀을 생성하고 전투 상태 변경 구독을 시작합니다.
@@ -28,6 +32,10 @@ namespace Backend.Object.Controller
             }
 
             _container = container;
+
+            _lifetimeCts?.Cancel();
+            _lifetimeCts?.Dispose();
+            _lifetimeCts = new CancellationTokenSource();
 
             _pool = await ObjectPoolManager.GetOrCreatePoolAsync<Monster>(
                 AddressableKeys.UI.Get<Monster>(),
@@ -62,19 +70,19 @@ namespace Backend.Object.Controller
                 .Subscribe(_ => RefreshStats())
                 .AddTo(_disposables);
 
+            BattleSystem.OnEnemyDeath
+                .Subscribe(_ => PlayDeathPresentationAsync().Forget())
+                .AddTo(_disposables);
+
             RefreshMonster();
         }
 
         private void RefreshMonster()
         {
-            if (_pool == null)
+            if (_pool == null || _isPlayingDeath)
                 return;
 
-            if (_activeMonsterCard != null)
-            {
-                _pool.Release(_activeMonsterCard);
-                _activeMonsterCard = null;
-            }
+            ReleaseActiveMonster();
 
             if (!BattleSystem.IsBattleActive || string.IsNullOrEmpty(BattleSystem.MonsterId))
                 return;
@@ -99,7 +107,7 @@ namespace Backend.Object.Controller
 
         private void RefreshStats()
         {
-            if (_activeMonsterCard == null)
+            if (_activeMonsterCard == null || _isPlayingDeath)
                 return;
 
             _activeMonsterCard.SetStats(
@@ -109,19 +117,58 @@ namespace Backend.Object.Controller
                 BattleSystem.NextAction.CurrentValue);
         }
 
+        private async UniTaskVoid PlayDeathPresentationAsync()
+        {
+            if (_isPlayingDeath)
+            {
+                BattleSystem.CompleteEnemyDeathPresentation();
+                return;
+            }
+
+            _isPlayingDeath = true;
+            var token = _lifetimeCts != null ? _lifetimeCts.Token : CancellationToken.None;
+
+            try
+            {
+                if (_activeMonsterCard != null)
+                    await _activeMonsterCard.PlayDeathFadeAsync(token);
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            finally
+            {
+                ReleaseActiveMonster();
+                _isPlayingDeath = false;
+                BattleSystem.CompleteEnemyDeathPresentation();
+            }
+        }
+
+        private void ReleaseActiveMonster()
+        {
+            if (_pool == null || _activeMonsterCard == null)
+                return;
+
+            _activeMonsterCard.ResetVisualState();
+            _pool.Release(_activeMonsterCard);
+            _activeMonsterCard = null;
+        }
+
         private void OnDestroy()
         {
             if (GameStateUtil.IsQuitting)
                 return;
 
+            _lifetimeCts?.Cancel();
+            _lifetimeCts?.Dispose();
+            _lifetimeCts = null;
+
             _disposables?.Dispose();
             _disposables = null;
 
-            if (_pool != null && _activeMonsterCard != null)
-                _pool.Release(_activeMonsterCard);
-
-            _activeMonsterCard = null;
+            ReleaseActiveMonster();
             ObjectPoolManager.ReleasePool<Monster>();
+            BattleSystem.CompleteEnemyDeathPresentation();
         }
     }
 }

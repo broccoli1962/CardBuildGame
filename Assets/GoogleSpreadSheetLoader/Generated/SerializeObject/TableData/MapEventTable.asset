@@ -13,51 +13,27 @@ MonoBehaviour:
   m_Name: MapEventTable
   m_EditorClassIdentifier: Assembly-CSharp::MapEventTable
   dataList:
-  - _event_id: altar_greed
-    _name_key: event_altar_greed_name
-    _desc_key: event_altar_greed_desc
-    _min_floor: 2
-    _option_a_key: event_altar_greed_a
-    _option_a_json: '{"grant_card_generation":1,"threat_add":10}'
+  - _event_id: cave_lake
+    _name_key: event_cave_lake_name
+    _desc_key: event_cave_lake_desc
+    _min_floor: 1
+    _option_a_key: event_cave_lake_a
+    _option_a_json: '{"max_hp_add":2,"full_heal":true}'
     _option_b_key: event_pass
     _option_b_json: '{}'
-  - _event_id: altar_oblivion
-    _name_key: event_altar_oblivion_name
-    _desc_key: event_altar_oblivion_desc
-    _min_floor: 3
-    _option_a_key: event_altar_oblivion_a
-    _option_a_json: '{"destroy_generated_card":1,"max_hp_add":2,"threat_sub_cps":true}'
+  - _event_id: dice_gambling
+    _name_key: event_dice_gambling_name
+    _desc_key: event_dice_gambling_desc
+    _min_floor: 1
+    _option_a_key: event_dice_gambling_a
+    _option_a_json: '{"dice_roll":{"success_chance":0.2,"max_mana_add":2}}'
     _option_b_key: event_pass
     _option_b_json: '{}'
-  - _event_id: altar_essence
-    _name_key: event_altar_essence_name
-    _desc_key: event_altar_essence_desc
-    _min_floor: 2
-    _option_a_key: event_altar_essence_a
-    _option_a_json: '{"max_mana_add":1,"max_hp_add":-2}'
-    _option_b_key: event_altar_essence_b
-    _option_b_json: '{"max_hp_add":3}'
-  - _event_id: altar_merchant
-    _name_key: event_altar_merchant_name
-    _desc_key: event_altar_merchant_desc
-    _min_floor: 2
-    _option_a_key: event_altar_merchant_a
-    _option_a_json: '{"hp_add":-3,"pending_boon":"EffectCapExpand"}'
-    _option_b_key: event_pass
-    _option_b_json: '{}'
-  - _event_id: altar_camp
-    _name_key: event_altar_camp_name
-    _desc_key: event_altar_camp_desc
-    _min_floor: 2
-    _option_a_key: event_altar_camp_a
-    _option_a_json: '{"hp_add":4}'
-    _option_b_key: event_altar_camp_b
-    _option_b_json: '{"purge_card":1}'
-  - _event_id: altar_sarcophagus
-    _name_key: event_altar_sarcophagus_name
-    _desc_key: event_altar_sarcophagus_desc
-    _min_floor: 3
-    _option_a_key: event_altar_sarcophagus_a
-    _option_a_json: '{"threat_add":-15,"destroy_random_generated_card":1}'
+  - _event_id: fortune_teller
+    _name_key: event_fortune_teller_name
+    _desc_key: event_fortune_teller_desc
+    _min_floor: 1
+    _option_a_key: event_fortune_teller_a
+    _option_a_json: '{"grant_card_generation":1}'
     _option_b_key: event_pass
     _option_b_json: '{}'

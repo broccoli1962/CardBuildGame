@@ -1,0 +1,43 @@
+CC0 / Public Domain BGM sources
+================================
+
+All tracks below are licensed under CC0 1.0 (Public Domain).
+Commercial use allowed. Attribution not required (optional thanks welcome).
+
+Battle_BattleThemeA.mp3
+  Author: cynicmusic
+  Source: https://opengameart.org/content/battle-theme-a
+
+Lobby_TownTheme.mp3
+  Author: cynicmusic
+  Source: https://opengameart.org/content/town-theme-rpg
+
+Map_FieldOfDreams.mp3
+  Source: https://opengameart.org/content/the-field-of-dreams
+
+Rest_OldTowerInn_Loop.wav
+  Source: https://opengameart.org/content/medieval-the-old-tower-inn
+
+Battle_DeterminedPursuit_Loop.wav
+  Source: https://opengameart.org/content/determined-pursuit-epic-orchestra-loop
+
+Event_AncientPowerOfSerpents.ogg
+  Source: https://opengameart.org/content/ancient-power-of-serpents
+
+Title_ALegendWillRise.mp3
+  Source: https://opengameart.org/content/a-legend-will-rise-orchestral
+
+Event_CaveTheme.ogg
+  Source: https://opengameart.org/content/cave-theme
+
+Event_FantasyChoir1.mp3
+  Source: https://opengameart.org/content/fantasy-choir-3-orchestral-pieces
+
+Event_Cave1_Holizna.mp3
+Event_Cave2_Holizna.mp3
+  Author: HoliznaCC0
+  Source: https://freemusicarchive.org/music/holiznacc0/gamer-soundtrack-caves
+
+Event_Enchantress_Holizna.mp3
+  Author: HoliznaCC0
+  Source: https://freemusicarchive.org/music/holiznacc0/retro-gamer-soundtrack/enchantress/

@@ -2,6 +2,7 @@ using Backend.Object.GameSystems.Gameplay;
 using Backend.Object.GameSystems.Llm;
 using Backend.Util.Management;
 using Cysharp.Threading.Tasks;
+using R3;
 using UnityEngine;
 
 namespace Backend.Object.Management
@@ -9,6 +10,12 @@ namespace Backend.Object.Management
     public class GameManager : SingletonGameObject<GameManager>
     {
         private static GamePhase _currentPhase;
+        private static readonly Subject<Unit> _onGameOver = new();
+
+        /// <summary>
+        /// 플레이어 사망으로 GameOver 페이즈에 진입했을 때 발행됩니다.
+        /// </summary>
+        public static Observable<Unit> OnGameOver => _onGameOver;
 
         protected override void OnAwake()
         {
@@ -30,12 +37,18 @@ namespace Backend.Object.Management
             DeckSystem.Initialize();
             BattleSystem.Initialize();
             CardCreationSystem.Initialize();
+            EventSystem.Initialize();
+            RestSystem.Initialize();
+            TreasureSystem.Initialize();
             MapSystem.Initialize();
             MapSystem.StartRun(chapter: 1);
         }
 
         private void EndGameplay_Internal()
         {
+            TreasureSystem.Dispose();
+            RestSystem.Dispose();
+            EventSystem.Dispose();
             CardCreationSystem.Dispose();
             MapSystem.Dispose();
             BattleSystem.Dispose();
@@ -45,6 +58,7 @@ namespace Backend.Object.Management
         private void GameOver_Internal()
         {
             SetPhase_Internal(GamePhase.GameOver);
+            _onGameOver.OnNext(Unit.Default);
         }
 
         private void StageClear_Internal()

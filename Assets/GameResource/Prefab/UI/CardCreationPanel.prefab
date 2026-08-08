@@ -74,7 +74,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4291279026
   m_fontColor: {r: 0.7, g: 0.72, b: 0.78, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -87,13 +87,13 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -171,11 +171,11 @@ RectTransform:
   - {fileID: 7390597780486451948}
   m_Father: {fileID: 3463320803069318931}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.08, y: 0.52}
-  m_AnchorMax: {x: 0.45, y: 0.6}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 310}
+  m_SizeDelta: {x: 710, y: 100}
+  m_Pivot: {x: 0, y: 0}
 --- !u!222 &5795267028685149017
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -228,9 +228,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Backend.Object.UI.CommonButton
   interactable: 1
   useAnimation: 0
-  useSound: 0
-  useCustomSoundId: 0
-  customSoundId: sfx_button
+  useSound: 1
+  useCustomSoundId: 1
+  customSoundId: UIClick_UI
   OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -361,7 +361,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4286608235
   m_fontColor: {r: 0.42, g: 0.45, b: 0.5, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -374,7 +374,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -456,11 +456,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3463320803069318931}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.05, y: 0.88}
-  m_AnchorMax: {x: 0.95, y: 0.96}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -20}
+  m_SizeDelta: {x: 1700, y: 100}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &7838582509693994071
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4280722377
   m_fontColor: {r: 0.79, g: 0.64, b: 0.15, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -511,13 +511,13 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -653,8 +653,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -789,9 +789,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Backend.Object.UI.CommonButton
   interactable: 1
   useAnimation: 0
-  useSound: 0
-  useCustomSoundId: 0
-  customSoundId: sfx_button
+  useSound: 1
+  useCustomSoundId: 1
+  customSoundId: UIClick_UI
   OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -869,7 +869,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4279175176
   m_fontColor: {r: 0.03, g: 0.03, b: 0.06, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -882,13 +882,13 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 28
-  m_fontSizeBase: 28
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -964,10 +964,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3463320803069318931}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.08, y: 0.8}
-  m_AnchorMax: {x: 0.92, y: 0.87}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -160}
+  m_SizeDelta: {x: 1700, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4644732024424969077
 CanvasRenderer:
@@ -1006,7 +1006,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4294105571
   m_fontColor: {r: 0.89, g: 0.85, b: 0.95, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1019,13 +1019,13 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1143,7 +1143,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4291279026
   m_fontColor: {r: 0.7, g: 0.72, b: 0.78, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1156,7 +1156,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -1293,7 +1293,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -1514,11 +1514,11 @@ RectTransform:
   - {fileID: 2791386910688846946}
   m_Father: {fileID: 3463320803069318931}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.55, y: 0.52}
-  m_AnchorMax: {x: 0.92, y: 0.6}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -100, y: 310}
+  m_SizeDelta: {x: 710, y: 100}
+  m_Pivot: {x: 1, y: 0}
 --- !u!222 &3013252552534296075
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1571,9 +1571,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Backend.Object.UI.CommonButton
   interactable: 1
   useAnimation: 0
-  useSound: 0
-  useCustomSoundId: 0
-  customSoundId: sfx_button
+  useSound: 1
+  useCustomSoundId: 1
+  customSoundId: UIClick_UI
   OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -1651,7 +1651,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4279175176
   m_fontColor: {r: 0.03, g: 0.03, b: 0.06, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1664,7 +1664,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -1805,9 +1805,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Backend.Object.UI.CommonButton
   interactable: 1
   useAnimation: 0
-  useSound: 0
-  useCustomSoundId: 0
-  customSoundId: sfx_button
+  useSound: 1
+  useCustomSoundId: 1
+  customSoundId: UIClick_UI
   OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -1935,7 +1935,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -2019,10 +2019,10 @@ RectTransform:
   - {fileID: 7782272679971976446}
   m_Father: {fileID: 3463320803069318931}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.08, y: 0.62}
-  m_AnchorMax: {x: 0.92, y: 0.78}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 130}
+  m_SizeDelta: {x: 1700, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5049966087314152527
 CanvasRenderer:
@@ -2339,11 +2339,11 @@ RectTransform:
   - {fileID: 5107629009680294162}
   m_Father: {fileID: 3463320803069318931}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.08, y: 0.08}
-  m_AnchorMax: {x: 0.92, y: 0.48}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 4.7427, y: 71.21698}
+  m_SizeDelta: {x: 1782.7363, y: 394.8536}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &4678948778144976711
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2469,7 +2469,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -2606,7 +2606,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -2866,9 +2866,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Backend.Object.UI.CommonButton
   interactable: 1
   useAnimation: 0
-  useSound: 0
-  useCustomSoundId: 0
-  customSoundId: sfx_button
+  useSound: 1
+  useCustomSoundId: 1
+  customSoundId: UIClick_UI
   OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -2959,7 +2959,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -3100,9 +3100,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Backend.Object.UI.CommonButton
   interactable: 1
   useAnimation: 0
-  useSound: 0
-  useCustomSoundId: 0
-  customSoundId: sfx_button
+  useSound: 1
+  useCustomSoundId: 1
+  customSoundId: UIClick_UI
   OnClick:
     m_PersistentCalls:
       m_Calls: []

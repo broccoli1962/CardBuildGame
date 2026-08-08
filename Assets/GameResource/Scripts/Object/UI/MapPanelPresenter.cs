@@ -67,9 +67,9 @@ namespace Backend.Object.UI
                 return;
 
             var tier = MapSystem.ThreatTier;
-            var threat = tier > 0 ? $"☠ T{tier}" : "T0";
+            var threat = tier > 0 ? $"T{tier}" : "T0";
             View.SetStatus(
-                $"❤️ {PlayerStateSystem.Hp.CurrentValue}/{PlayerStateSystem.MaxHp.CurrentValue}  ·  🔮 {PlayerStateSystem.Mana.CurrentValue}/{PlayerStateSystem.MaxMana.CurrentValue}  ·  {threat}");
+                $"HP {PlayerStateSystem.Hp.CurrentValue}/{PlayerStateSystem.MaxHp.CurrentValue}  ·  MP {PlayerStateSystem.Mana.CurrentValue}/{PlayerStateSystem.MaxMana.CurrentValue}  ·  {threat}");
         }
 
         private void RefreshDetail()
@@ -80,7 +80,7 @@ namespace Backend.Object.UI
             if (!MapSystem.TryGetSelectedNode(out var node))
             {
                 View.SetDetail(string.Empty, false);
-                View.SetEnterInteractable(false, "진입 →");
+                View.SetEnterInteractable(false, "진입");
                 return;
             }
 
@@ -111,18 +111,18 @@ namespace Backend.Object.UI
                 MapNodeType.Battle => $"{title}\n보상: 카드 생성 기회",
                 MapNodeType.Elite => $"{title}\n보상: 후보 2장 중 1장 · 최대 체력 +2",
                 MapNodeType.Boss => $"{title}\n챕터 보스전",
-                MapNodeType.Rest => $"{title}\n휴식 / 정화 / 각인 중 1택",
+                MapNodeType.Rest => $"{title}\n최대 체력의 절반 회복",
                 MapNodeType.Event => $"{title}\n무슨 일이 일어날지 알 수 없다",
-                MapNodeType.Treasure => $"{title}\n영구 강화 3택 1",
+                MapNodeType.Treasure => $"{title}\n체력 또는 마나 영구 강화 1택",
                 _ => title,
             };
         }
 
         private static string GetEnterLabel(MapNodeType type) => type switch
         {
-            MapNodeType.Elite => "⚠️ 정예와 교전",
-            MapNodeType.Boss => "⚠️ 보스와 교전",
-            _ => "진입 →",
+            MapNodeType.Elite => "정예와 교전",
+            MapNodeType.Boss => "보스와 교전",
+            _ => "진입",
         };
     }
 }
