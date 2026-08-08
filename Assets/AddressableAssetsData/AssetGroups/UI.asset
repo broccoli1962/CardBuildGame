@@ -15,23 +15,8 @@ MonoBehaviour:
   m_GroupName: UI
   m_GUID: b48e10bce2f495d47ae298b92231fb02
   m_SerializeEntries:
-  - m_GUID: 827e91b86f057204cb735e344071d5c2
-    m_Address: UI/MapPanel.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8b8f1b3301d4992499ea949aac0796c4
-    m_Address: UI/CardCreationPanel.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 9c633a976900ec2458405924c966ffdc
-    m_Address: UI/MapPreviewPopup.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b1a40095b30c0a84ba3252f30aa694b0
-    m_Address: UI/DeckInspectPopup.prefab
+  - m_GUID: 727b46655af157742a21d5675b1ca87d
+    m_Address: Assets/GameResource/Images/VFX
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -36,7 +36,7 @@ namespace Backend.Object.GameSystems.Gameplay
         {
             var maxHp = TableManager.GetInt(TableManager.BalanceKey.PlayerStartMaxHp, 10);
             var startHp = TableManager.GetInt(TableManager.BalanceKey.PlayerStartHp, 10);
-            var maxMana = TableManager.GetInt(TableManager.BalanceKey.PlayerStartMaxMana, 10);
+            var maxMana = TableManager.GetInt(TableManager.BalanceKey.PlayerStartMaxMana, 5);
 
             _maxHp.Value = maxHp;
             _hp.Value = Mathf.Min(startHp, maxHp);

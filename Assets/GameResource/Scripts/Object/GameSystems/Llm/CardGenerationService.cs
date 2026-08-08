@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading;
 using Backend.Object.GameSystems.Gameplay;
 using Backend.Object.Management;
@@ -27,8 +26,6 @@ namespace Backend.Object.GameSystems.Llm
     /// </summary>
     public static class CardGenerationService
     {
-        private static readonly Regex JsonBlockRegex = new(@"\{[\s\S]*\}", RegexOptions.Compiled);
-
         /// <summary>
         /// 플레이어 콘셉트로 카드를 생성합니다. LLM 실패 시 Fallback 카드를 반환합니다.
         /// </summary>
@@ -37,17 +34,24 @@ namespace Backend.Object.GameSystems.Llm
             float? temperatureOverride = null,
             CancellationToken cancellationToken = default)
         {
-            var prompt = BuildPrompt(userConcept);
+            var constraints = ConceptConstraintHelper.Parse(userConcept);
+            var prompt = BuildPrompt(userConcept, constraints);
             var llmText = await LocalLlmClient.GenerateAsync(prompt, temperatureOverride, cancellationToken);
 
             if (TryParseCard(llmText, out var parsed))
             {
-                parsed.power_score = CalculatePowerScore(parsed);
+                FinalizeCard(parsed, constraints);
                 return new CardGenerationResult(parsed, usedFallback: false);
             }
 
-            Debug.LogWarning("[CardGenerationService] LLM response invalid. Using fallback generator.");
-            return new CardGenerationResult(FallbackCardGenerator.Generate(userConcept), usedFallback: true);
+            if (!string.IsNullOrWhiteSpace(llmText))
+                Debug.LogWarning($"[CardGenerationService] LLM response invalid. Using fallback.\n--- RAW ---\n{TrimForLog(llmText)}");
+            else
+                Debug.LogWarning("[CardGenerationService] LLM response empty. Using fallback generator.");
+
+            var fallback = FallbackCardGenerator.Generate(userConcept);
+            FinalizeCard(fallback, constraints);
+            return new CardGenerationResult(fallback, usedFallback: true);
         }
 
         /// <summary>
@@ -79,7 +83,7 @@ namespace Backend.Object.GameSystems.Llm
             var manaMultiplier = TableManager.GetFloat(TableManager.BalanceKey.ManaCostMultiplier, 1.5f);
             raw -= card.mana_cost * manaMultiplier;
 
-            var maxMana = TableManager.GetInt(TableManager.BalanceKey.PlayerStartMaxMana, 10);
+            var maxMana = TableManager.GetInt(TableManager.BalanceKey.PlayerStartMaxMana, 5);
             var usability = card.mana_cost <= maxMana
                 ? TableManager.GetFloat(TableManager.BalanceKey.UsabilityFactorNormal, 1f)
                 : TableManager.GetFloat(TableManager.BalanceKey.UsabilityFactorManaOver, 0.5f);
@@ -87,11 +91,12 @@ namespace Backend.Object.GameSystems.Llm
             return Mathf.Max(0f, raw * usability);
         }
 
-        private static string BuildPrompt(string userConcept)
+        private static string BuildPrompt(string userConcept, ConceptConstraintHelper.Constraints constraints)
         {
             var concept = string.IsNullOrWhiteSpace(userConcept) ? "균형 잡힌 카드" : userConcept.Trim();
+            var requiredHint = ConceptConstraintHelper.BuildPromptHint(constraints);
             return
-                "You are a card game designer. Return ONLY one JSON object with no markdown.\n" +
+                "You are a card game designer. Return ONLY one JSON object with no markdown, no explanation, and no extra objects.\n" +
                 "Schema:\n" +
                 "{\n" +
                 "  \"name\": \"8 chars max Korean name\",\n" +
@@ -102,6 +107,10 @@ namespace Backend.Object.GameSystems.Llm
                 "}\n" +
                 "Rules:\n" +
                 "- Use only allowed effect types.\n" +
+                "- If the player specifies a number for damage/mana/shield/heal, use EXACTLY that number.\n" +
+                "- card_type defense MUST use GAIN_SHIELD (armor/block). Never use HEAL_HP for defense.\n" +
+                "- card_type heal MUST use HEAL_HP. Never use GAIN_SHIELD for heal.\n" +
+                "- 방어도/실드/shield = GAIN_SHIELD. 회복/힐/heal = HEAL_HP. Do not swap them.\n" +
                 "- DEAL_DAMAGE must set target: single (one enemy) or aoe (all enemies). Default single if omitted.\n" +
                 "- target is only meaningful for DEAL_DAMAGE; omit it for other types.\n" +
                 "- If request implies area/splash/all enemies, use aoe and write 광역 in description.\n" +
@@ -109,7 +118,23 @@ namespace Backend.Object.GameSystems.Llm
                 "- A card may mix single and aoe DEAL_DAMAGE effects.\n" +
                 "- DEAL_DAMAGE over 15 requires PLAYER_HP_CHANGE penalty.\n" +
                 "- image_path is always assets/cards/joker.png.\n" +
+                "- Stop immediately after the closing brace of the single JSON object.\n" +
+                requiredHint +
                 $"Player request: {concept}";
+        }
+
+        private static void FinalizeCard(GeneratedCardData card, ConceptConstraintHelper.Constraints constraints)
+        {
+            ConceptConstraintHelper.Apply(card, constraints);
+            ConceptConstraintHelper.AlignCardTypeAndEffects(card);
+            ApplyDamagePenaltyRule(card);
+
+            var maxDesc = TableManager.GetInt(TableManager.BalanceKey.CardDescMaxLength, 100);
+            card.description = Trim(
+                CardDescriptionFormatter.EnsureDamageFormKeywords(card.description, card.effects),
+                maxDesc,
+                "AI가 생성한 카드");
+            card.power_score = CalculatePowerScore(card);
         }
 
         private static bool TryParseCard(string llmText, out GeneratedCardData card)
@@ -118,14 +143,13 @@ namespace Backend.Object.GameSystems.Llm
             if (string.IsNullOrWhiteSpace(llmText))
                 return false;
 
-            var match = JsonBlockRegex.Match(llmText);
-            if (!match.Success)
+            if (!TryExtractFirstJsonObject(llmText, out var json))
                 return false;
 
             LlmCardPayload payload;
             try
             {
-                payload = JsonConvert.DeserializeObject<LlmCardPayload>(match.Value);
+                payload = JsonConvert.DeserializeObject<LlmCardPayload>(json);
             }
             catch (Exception e)
             {
@@ -247,6 +271,70 @@ namespace Backend.Object.GameSystems.Llm
 
             value = value.Trim();
             return value.Length <= maxLength ? value : value[..maxLength];
+        }
+
+        /// <summary>
+        /// 모델이 JSON을 여러 번 반복해도 첫 번째 완전한 객체만 추출한다.
+        /// </summary>
+        private static bool TryExtractFirstJsonObject(string text, out string json)
+        {
+            json = null;
+            var start = text.IndexOf('{');
+            if (start < 0)
+                return false;
+
+            var depth = 0;
+            var inString = false;
+            var escape = false;
+            for (var i = start; i < text.Length; i++)
+            {
+                var c = text[i];
+                if (inString)
+                {
+                    if (escape)
+                    {
+                        escape = false;
+                        continue;
+                    }
+
+                    if (c == '\\')
+                    {
+                        escape = true;
+                        continue;
+                    }
+
+                    if (c == '"')
+                        inString = false;
+                    continue;
+                }
+
+                switch (c)
+                {
+                    case '"':
+                        inString = true;
+                        break;
+                    case '{':
+                        depth++;
+                        break;
+                    case '}':
+                        depth--;
+                        if (depth == 0)
+                        {
+                            json = text.Substring(start, i - start + 1);
+                            return true;
+                        }
+
+                        break;
+                }
+            }
+
+            return false;
+        }
+
+        private static string TrimForLog(string value, int maxLength = 500)
+        {
+            value = value.Trim();
+            return value.Length <= maxLength ? value : value[..maxLength] + "...";
         }
 
         [Serializable]

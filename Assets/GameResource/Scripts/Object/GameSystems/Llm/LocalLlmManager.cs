@@ -15,7 +15,7 @@ namespace Backend.Object.GameSystems.Llm
     public sealed class LocalLlmManager : SingletonGameObject<LocalLlmManager>
     {
         private const string ModelFileName = "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf";
-        private const int DefaultMaxTokens = 256;
+        private const int DefaultMaxTokens = 192;
 
         private readonly SemaphoreSlim _inferenceLock = new(1, 1);
         private LlamaInferenceService _service;
@@ -30,10 +30,11 @@ namespace Backend.Object.GameSystems.Llm
             LoadModelAsync().Forget();
         }
 
-        private void OnApplicationQuit()
+        protected override void OnApplicationQuit()
         {
             _service?.Dispose();
             _service = null;
+            base.OnApplicationQuit();
         }
 
         /// <summary>
@@ -66,18 +67,36 @@ namespace Backend.Object.GameSystems.Llm
             float? temperatureOverride,
             CancellationToken cancellationToken)
         {
-            if (!_isModelReady || _service == null)
-            {
-                Debug.LogWarning("[LocalLlmManager] Model is not ready.");
-                return null;
-            }
-
-            var timeoutSeconds = TableManager.GetInt(TableManager.BalanceKey.LlmTimeout, 15);
+            var timeoutSeconds = TableManager.GetInt(TableManager.BalanceKey.LlmTimeout, 60);
             var temperature = temperatureOverride
                 ?? TableManager.GetFloat(TableManager.BalanceKey.LlmTemperature, 0.7f);
 
             using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             timeoutCts.CancelAfter(TimeSpan.FromSeconds(timeoutSeconds));
+
+            if (!_isModelReady || _service == null)
+            {
+                if (_isModelLoading)
+                {
+                    try
+                    {
+                        await UniTask.WaitUntil(
+                            () => _isModelReady || !_isModelLoading,
+                            cancellationToken: timeoutCts.Token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Debug.LogWarning("[LocalLlmManager] Timed out waiting for model load.");
+                        return null;
+                    }
+                }
+
+                if (!_isModelReady || _service == null)
+                {
+                    Debug.LogWarning("[LocalLlmManager] Model is not ready.");
+                    return null;
+                }
+            }
 
             await _inferenceLock.WaitAsync(timeoutCts.Token);
             try

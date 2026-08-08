@@ -22,7 +22,7 @@ namespace Backend.Object.UI
             View.SetHeader($"MAP PREVIEW · CHAPTER {MapSystem.Chapter.CurrentValue}");
             var tier = MapSystem.ThreatTier;
             View.SetStatus(
-                $"현재 F{MapSystem.CurrentFloor.CurrentValue}  ·  경로 {MapSystem.PathHistory.Count}  ·  {(tier > 0 ? $"☠ T{tier}" : "T0")}");
+                $"현재 F{MapSystem.CurrentFloor.CurrentValue}  ·  경로 {MapSystem.PathHistory.Count}  ·  {(tier > 0 ? $"T{tier}" : "T0")}");
 
             if (View.CloseButton != null)
             {

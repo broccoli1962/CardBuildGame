@@ -1,6 +1,5 @@
 using Backend.Object.UI;
 using Cysharp.Threading.Tasks;
-using R3;
 
 namespace Backend.Object.Management
 {
@@ -8,6 +7,11 @@ namespace Backend.Object.Management
     {
         protected override async UniTask OnEnterAsync()
         {
+            // Scene-embedded UIRoot/LobbyScreenPanel is for editor preview only.
+            // After returning from GameScene it loads on top of the DDOL UIManager root
+            // and steals clicks with no Presenter OnOpen bindings.
+            UIManager.DisableActiveSceneUiRoot();
+
             var loading = await UIManager.OpenAsync<LoadingPanel>();
 
             await loading.AnimateProgressAsync(0f, 0.3f, duration: 0.5f);
@@ -16,8 +20,10 @@ namespace Backend.Object.Management
 
             await loading.AnimateProgressAsync(0.3f, 1f, duration: 0.5f);
 
+            GameBgm.PlayLobby();
             await UIManager.OpenAsync<LobbyScreenPanel>();
             UIManager.Close(loading);
+            UIManager.UnblockUI();
         }
     }
 }

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Backend.AddressableKey;
 using Backend.Object.GameSystems.Gameplay;
-using Backend.Object.GameSystems.Llm;
-using Backend.Util;
+using Backend.Object.Management;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Backend.Object.UI
 {
@@ -27,9 +28,9 @@ namespace Backend.Object.UI
         [SerializeField] private CommonButton _discardTabButton;
         [SerializeField] private CommonButton _closeButton;
         [SerializeField] private RectTransform _contentRoot;
-        [SerializeField] private GameObject _rowPrefab;
 
-        private readonly List<GameObject> _spawnedRows = new();
+        private readonly List<Card> _spawnedCards = new();
+        private Card _cardPrefab;
 
         public CommonButton DrawTabButton => _drawTabButton;
         public CommonButton DiscardTabButton => _discardTabButton;
@@ -67,31 +68,57 @@ namespace Backend.Object.UI
             if (_emptyText != null)
                 _emptyText.gameObject.SetActive(empty);
 
-            if (empty || _contentRoot == null || _rowPrefab == null)
+            if (empty || _contentRoot == null)
+                return;
+
+            if (!EnsureCardPrefab())
                 return;
 
             for (var i = 0; i < cards.Count; i++)
             {
-                var card = cards[i];
-                if (card == null)
+                var runtimeCard = cards[i];
+                if (runtimeCard == null)
                     continue;
 
-                var row = Instantiate(_rowPrefab, _contentRoot);
-                row.SetActive(true);
-                BindRow(row, card);
-                _spawnedRows.Add(row);
+                var card = Instantiate(_cardPrefab, _contentRoot);
+                card.gameObject.SetActive(true);
+                card.SetHoverEnabled(false);
+                card.Bind(runtimeCard);
+                _spawnedCards.Add(card);
             }
         }
 
         public void ClearRows()
         {
-            for (var i = 0; i < _spawnedRows.Count; i++)
+            for (var i = 0; i < _spawnedCards.Count; i++)
             {
-                if (_spawnedRows[i] != null)
-                    Destroy(_spawnedRows[i]);
+                if (_spawnedCards[i] != null)
+                    Destroy(_spawnedCards[i].gameObject);
             }
 
-            _spawnedRows.Clear();
+            _spawnedCards.Clear();
+        }
+
+        private bool EnsureCardPrefab()
+        {
+            if (_cardPrefab != null)
+                return true;
+
+            var address = AddressableKeys.UI.Get<Card>();
+            if (string.IsNullOrEmpty(address))
+            {
+                Debug.LogError("[DeckInspectPopup] Card addressable key is missing.");
+                return false;
+            }
+
+            _cardPrefab = ResourceManager.LoadComponent<Card>(address);
+            if (_cardPrefab == null)
+            {
+                Debug.LogError("[DeckInspectPopup] Failed to load Card prefab.");
+                return false;
+            }
+
+            return true;
         }
 
         private static void SetTabActive(CommonButton button, bool active)
@@ -100,46 +127,13 @@ namespace Backend.Object.UI
                 return;
 
             button.interactable = !active;
-            var image = button.GetComponent<UnityEngine.UI.Image>();
+            var image = button.GetComponent<Image>();
             if (image != null)
             {
                 image.color = active
                     ? new Color(0.79f, 0.64f, 0.15f, 1f)
                     : new Color(0.25f, 0.25f, 0.32f, 1f);
             }
-        }
-
-        private static void BindRow(GameObject row, RuntimeCard card)
-        {
-            var nameText = FindText(row.transform, "Name");
-            var costText = FindText(row.transform, "Cost");
-            var metaText = FindText(row.transform, "Meta");
-            var descText = FindText(row.transform, "Description");
-
-            var displayName = card.IsGenerated
-                ? card.DisplayName
-                : card.NameKey.GetLocalizeText();
-            var description = card.IsGenerated
-                ? CardDescriptionFormatter.ColorizeDamageFormKeywords(card.DisplayDescription)
-                : card.DescKey.GetLocalizeText();
-
-            if (nameText != null)
-                nameText.text = displayName;
-            if (costText != null)
-                costText.text = card.ManaCost.ToString();
-            if (metaText != null)
-                metaText.text = card.CardType.ToString();
-            if (descText != null)
-            {
-                descText.richText = true;
-                descText.text = description;
-            }
-        }
-
-        private static TextMeshProUGUI FindText(Transform root, string childName)
-        {
-            var child = root.Find(childName);
-            return child != null ? child.GetComponent<TextMeshProUGUI>() : null;
         }
     }
 }

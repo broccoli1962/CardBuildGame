@@ -1053,9 +1053,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Backend.Object.UI.CommonButton
   interactable: 1
   useAnimation: 0
-  useSound: 0
-  useCustomSoundId: 0
-  customSoundId: sfx_button
+  useSound: 1
+  useCustomSoundId: 1
+  customSoundId: UIClick_UI
   OnClick:
     m_PersistentCalls:
       m_Calls:
