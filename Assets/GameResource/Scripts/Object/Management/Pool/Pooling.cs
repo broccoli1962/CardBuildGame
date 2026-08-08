@@ -85,7 +85,22 @@ namespace Backend.Object.Management.Pool
             return newPool;
         }
 
-        public T Get() => pool.Get();
+        public T Get()
+        {
+            // Scene unload can destroy inactive pooled objects while the pool still holds refs.
+            // Drain destroyed entries; once the stack is empty ObjectPool creates a new instance.
+            const int maxAttempts = 8;
+            for (var attempt = 0; attempt < maxAttempts; attempt++)
+            {
+                var element = pool.Get();
+                if (element != null)
+                    return element;
+            }
+
+            Debug.LogError($"[Pooling<{typeof(T).Name}>] Failed to get a valid pooled instance.");
+            return null;
+        }
+
         public PooledObject<T> Get(out T instance) => pool.Get(out instance);
 
         public void Release(T element)
@@ -121,6 +136,9 @@ namespace Backend.Object.Management.Pool
 
         private void OnGetFromPool(T element)
         {
+            if (element == null)
+                return;
+
             activeObjects.Add(element);
             element.gameObject.SetActive(true);
             onGet?.Invoke(element);
@@ -128,6 +146,9 @@ namespace Backend.Object.Management.Pool
 
         private void OnReleaseToPool(T element)
         {
+            if (element == null)
+                return;
+
             activeObjects.Remove(element);
             onRelease?.Invoke(element);
             element.gameObject.SetActive(false);

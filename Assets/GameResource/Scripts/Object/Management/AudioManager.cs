@@ -11,11 +11,18 @@ namespace Backend.Object.Management
     public class AudioManager : SingletonGameObject<AudioManager>
     {
         private static readonly string _audioSourcePoolKey = "AudioSource";
-        private readonly List<string> _preloadAudioClipKeys = new() { "popSound" };
+        private readonly List<string> _preloadAudioClipKeys = new()
+        {
+            "sfx_button",
+            "UIClick_UI_Button_Analog_Vintage_Double_Click_Neutral_Dry_Press_11_ESM_BG",
+        };
 
         // PlayerPrefs 키
         private const string PREF_BGM_ENABLED = "AudioManager_BgmEnabled";
         private const string PREF_SFX_ENABLED = "AudioManager_SfxEnabled";
+        private const string PREF_BGM_VOLUME = "AudioManager_BgmVolume";
+        private const string PREF_SFX_VOLUME = "AudioManager_SfxVolume";
+        private const float DefaultVolume = 1f;
 
         // 로드된 클립을 캐싱할 딕셔너리
         private readonly Dictionary<string, AudioClip> _clips = new();
@@ -34,6 +41,7 @@ namespace Backend.Object.Management
         private const string AUDIO_SOURCE_POOL_KEY = "AudioMixer";
         private const string MIXER_BGM_PARAM = "BGMVolume";
         private const string MIXER_SFX_PARAM = "SFXVolume";
+        private bool _audioSourcePoolBoundToManager;
 
         // 설정 프로퍼티
         public bool IsBgmEnabled
@@ -42,7 +50,8 @@ namespace Backend.Object.Management
             set
             {
                 PlayerPrefs.SetInt(PREF_BGM_ENABLED, value ? 1 : 0);
-                ApplyBgmMixerVolume(value);
+                PlayerPrefs.Save();
+                ApplyBgmMixerVolume();
                 if (!value) StopBgmImmediate();
             }
         }
@@ -53,7 +62,36 @@ namespace Backend.Object.Management
             set
             {
                 PlayerPrefs.SetInt(PREF_SFX_ENABLED, value ? 1 : 0);
-                ApplySfxMixerVolume(value);
+                PlayerPrefs.Save();
+                ApplySfxMixerVolume();
+            }
+        }
+
+        /// <summary>
+        /// BGM 볼륨 (0~1). On/Off 와 별도로 저장되며, 켜진 상태에서 Mixer 에 반영됩니다.
+        /// </summary>
+        public float BgmVolume
+        {
+            get => Mathf.Clamp01(PlayerPrefs.GetFloat(PREF_BGM_VOLUME, DefaultVolume));
+            set
+            {
+                PlayerPrefs.SetFloat(PREF_BGM_VOLUME, Mathf.Clamp01(value));
+                PlayerPrefs.Save();
+                ApplyBgmMixerVolume();
+            }
+        }
+
+        /// <summary>
+        /// SFX 볼륨 (0~1). On/Off 와 별도로 저장되며, 켜진 상태에서 Mixer 에 반영됩니다.
+        /// </summary>
+        public float SfxVolume
+        {
+            get => Mathf.Clamp01(PlayerPrefs.GetFloat(PREF_SFX_VOLUME, DefaultVolume));
+            set
+            {
+                PlayerPrefs.SetFloat(PREF_SFX_VOLUME, Mathf.Clamp01(value));
+                PlayerPrefs.Save();
+                ApplySfxMixerVolume();
             }
         }
 
@@ -300,41 +338,52 @@ namespace Backend.Object.Management
                 return;
             }
 
-            var bgmGroups = _mixer.FindMatchingGroups("BGM");
-            var sfxGroups = _mixer.FindMatchingGroups("SFX");
+            // 그룹명: Master / BGMVolume / SFXVolume
+            var bgmGroups = _mixer.FindMatchingGroups("BGMVolume");
+            var sfxGroups = _mixer.FindMatchingGroups("SFXVolume");
 
             _bgmGroup = bgmGroups.Length > 0 ? bgmGroups[0] : null;
             _sfxGroup = sfxGroups.Length > 0 ? sfxGroups[0] : null;
 
-            // 저장된 On/Off 상태를 Mixer에 반영
-            ApplyBgmMixerVolume(IsBgmEnabled);
-            ApplySfxMixerVolume(IsSfxEnabled);
+            if (_bgmGroup == null)
+                Debug.LogError("[AudioManager] AudioMixer group 'BGMVolume' not found.");
+            if (_sfxGroup == null)
+                Debug.LogError("[AudioManager] AudioMixer group 'SFXVolume' not found.");
+
+            // 저장된 On/Off·볼륨을 Mixer에 반영
+            ApplyBgmMixerVolume();
+            ApplySfxMixerVolume();
         }
 
-        private void ApplyBgmMixerVolume(bool enabled)
+        private void ApplyBgmMixerVolume()
         {
             if (_mixer == null) return;
-            _mixer.SetFloat(MIXER_BGM_PARAM, enabled ? 0f : -80f);
+            float db = !IsBgmEnabled ? -80f : LinearToDb(BgmVolume);
+            if (!_mixer.SetFloat(MIXER_BGM_PARAM, db))
+                Debug.LogWarning($"[AudioManager] Failed to set mixer param '{MIXER_BGM_PARAM}'. Is it exposed?");
         }
 
-        private void ApplySfxMixerVolume(bool enabled)
+        private void ApplySfxMixerVolume()
         {
             if (_mixer == null) return;
-            _mixer.SetFloat(MIXER_SFX_PARAM, enabled ? 0f : -80f);
+            float db = !IsSfxEnabled ? -80f : LinearToDb(SfxVolume);
+            if (!_mixer.SetFloat(MIXER_SFX_PARAM, db))
+                Debug.LogWarning($"[AudioManager] Failed to set mixer param '{MIXER_SFX_PARAM}'. Is it exposed?");
         }
 
         private void SetBgmVolume_Internal(float linear)
         {
-            if (_mixer == null) return;
-            float db = Mathf.Log10(Mathf.Max(linear, 0.0001f)) * 20f;
-            _mixer.SetFloat(MIXER_BGM_PARAM, db);
+            BgmVolume = linear;
         }
 
         private void SetSfxVolume_Internal(float linear)
         {
-            if (_mixer == null) return;
-            float db = Mathf.Log10(Mathf.Max(linear, 0.0001f)) * 20f;
-            _mixer.SetFloat(MIXER_SFX_PARAM, db);
+            SfxVolume = linear;
+        }
+
+        private static float LinearToDb(float linear)
+        {
+            return Mathf.Log10(Mathf.Max(linear, 0.0001f)) * 20f;
         }
 
         #endregion
@@ -343,13 +392,40 @@ namespace Backend.Object.Management
 
         private async UniTask<AudioSource> GetOrCreateAudioSource()
         {
-            var pool = await ObjectPoolManager.GetOrCreatePoolAsync<AudioSource>(AddressableKeys.InGame.Get(_audioSourcePoolKey), defaultCapacity: 8, maxSize: 20);
+            // Discard any scene-bound AudioSource pool created without a DDOL parent.
+            if (!_audioSourcePoolBoundToManager)
+            {
+                ObjectPoolManager.ReleasePool<AudioSource>();
+                _audioSourcePoolBoundToManager = true;
+            }
+
+            // Parent under this DDOL manager so pooled sources survive scene unload.
+            var pool = await ObjectPoolManager.GetOrCreatePoolAsync<AudioSource>(
+                AddressableKeys.InGame.Get(_audioSourcePoolKey),
+                parent: transform,
+                defaultCapacity: 8,
+                maxSize: 20);
+
             if (pool == null)
             {
                 Debug.LogError($"[AudioManager] Failed to get AudioSource from PoolManager: {_audioSourcePoolKey}");
                 return null;
             }
-            return pool.Get();
+
+            var audioSource = pool.Get();
+            if (audioSource == null)
+            {
+                // Contaminated pool — rebuild under this manager.
+                ObjectPoolManager.ReleasePool<AudioSource>();
+                pool = await ObjectPoolManager.GetOrCreatePoolAsync<AudioSource>(
+                    AddressableKeys.InGame.Get(_audioSourcePoolKey),
+                    parent: transform,
+                    defaultCapacity: 8,
+                    maxSize: 20);
+                audioSource = pool?.Get();
+            }
+
+            return audioSource;
         }
 
         private async UniTaskVoid PreloadAudioClip_Internal(){
@@ -387,42 +463,56 @@ namespace Backend.Object.Management
         /// <summary>
         /// AudioMixer 에셋을 로드하고 BGM/SFX 그룹을 초기화합니다. Boot 초기화 시 1회 호출됩니다.
         /// </summary>
-        public static UniTask InitMixer() => Instance.InitMixer_InternalAsync();
+        public static UniTask InitMixer()
+        {
+            var instance = Instance;
+            return instance != null ? instance.InitMixer_InternalAsync() : UniTask.CompletedTask;
+        }
 
         /// <summary>
-        /// BGM 볼륨을 설정합니다 (0~1 선형 값, 내부적으로 dB 변환).
+        /// BGM 볼륨을 설정합니다 (0~1 선형 값, PlayerPrefs 저장 후 Mixer 반영).
         /// </summary>
-        public static void SetBgmVolume(float linear) => Instance.SetBgmVolume_Internal(linear);
+        public static void SetBgmVolume(float linear) => Instance?.SetBgmVolume_Internal(linear);
 
         /// <summary>
-        /// SFX 볼륨을 설정합니다 (0~1 선형 값, 내부적으로 dB 변환).
+        /// SFX 볼륨을 설정합니다 (0~1 선형 값, PlayerPrefs 저장 후 Mixer 반영).
         /// </summary>
-        public static void SetSfxVolume(float linear) => Instance.SetSfxVolume_Internal(linear);
+        public static void SetSfxVolume(float linear) => Instance?.SetSfxVolume_Internal(linear);
+
+        /// <summary>
+        /// 저장된 BGM 볼륨 (0~1)을 반환합니다.
+        /// </summary>
+        public static float GetBgmVolume() => Instance != null ? Instance.BgmVolume : DefaultVolume;
+
+        /// <summary>
+        /// 저장된 SFX 볼륨 (0~1)을 반환합니다.
+        /// </summary>
+        public static float GetSfxVolume() => Instance != null ? Instance.SfxVolume : DefaultVolume;
 
         /// <summary>
         /// BGM 재생 (페이드 인 적용)
         /// </summary>
-        public static void PlayBgm(string key) => Instance.PlayBgm_Internal(key).Forget();
+        public static void PlayBgm(string key) => Instance?.PlayBgm_Internal(key).Forget();
 
         /// <summary>
         /// BGM 정지 (페이드 아웃 적용)
         /// </summary>
-        public static void StopBgm() => Instance.StopBgm_Internal();
+        public static void StopBgm() => Instance?.StopBgm_Internal();
 
         /// <summary>
         /// 사운드 효과음 재생
         /// </summary>
-        public static void PlaySfx(string key, float pitch = 1f) => Instance.PlaySfx_InternalAsync(key, pitch).Forget();
+        public static void PlaySfx(string key, float pitch = 1f) => Instance?.PlaySfx_InternalAsync(key, pitch).Forget();
 
         /// <summary>
         /// 딜레이 후 사운드 효과음 재생
         /// </summary>
-        public static void PlaySfxDelay(string key, float delay, float pitch = 1f) => Instance.PlaySfx_DelayAsync(key, delay, pitch).Forget();
+        public static void PlaySfxDelay(string key, float delay, float pitch = 1f) => Instance?.PlaySfx_DelayAsync(key, delay, pitch).Forget();
 
         /// <summary>
         /// 사운드 효과음 프리로드
         /// </summary>
-        public static void PreloadSounds() => Instance.PreloadAudioClip_Internal().Forget();
+        public static void PreloadSounds() => Instance?.PreloadAudioClip_Internal().Forget();
 
         #endregion
     }

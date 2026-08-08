@@ -151,13 +151,14 @@ namespace Backend.Object.Management
             return component;
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             foreach (var handle in _resourceCache.Values)
             {
                 Addressables.Release(handle);
             }
             _resourceCache.Clear();
+            base.OnDestroy();
         }
         #endregion
     }

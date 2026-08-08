@@ -8,6 +8,7 @@ using R3;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Pool;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Backend.Object.Management
@@ -81,9 +82,10 @@ namespace Backend.Object.Management
             _registryReady.TrySetResult();
         }
 
-        private void OnDestroy()
+        protected override void OnDestroy()
         {
             _onBackEmpty?.Dispose();
+            base.OnDestroy();
         }
 
         #region Open Internal
@@ -162,6 +164,11 @@ namespace Backend.Object.Management
 
         private async UniTaskVoid RunCloseAsync(UIBase target, bool releasePool)
         {
+            await RunCloseCoreAsync(target, releasePool);
+        }
+
+        private async UniTask RunCloseCoreAsync(UIBase target, bool releasePool)
+        {
             if (target == null) return;
 
             await target.CloseAsync();
@@ -178,7 +185,7 @@ namespace Backend.Object.Management
                     lifecycle.ReleasePool?.Invoke();
                 }
             }
-            else
+            else if (target != null)
             {
                 Debug.LogWarning($"[UIManager] Lifecycle missing for {target.GetType().Name}. Falling back to deactivate.");
                 target.gameObject.SetActive(false);
@@ -331,24 +338,48 @@ namespace Backend.Object.Management
             if (_blockerRoot != null) _blockerRoot.SetActive(false);
         }
 
-        private void CloseAllUI_Internal()
+        private async UniTask CloseAllUI_InternalAsync()
         {
             var snapshot = ListPool<UIBase>.Get();
             try
             {
                 snapshot.AddRange(_active.Values);
-                foreach (var ui in snapshot)
-                {
-                    Close_Internal(ui);
-                }
+                // Clear immediately so scene-enter OpenAsync cannot race with stale entries.
+                _active.Clear();
+                _backStack.Clear();
+                UnblockUI_Internal();
+
+                if (snapshot.Count == 0)
+                    return;
+
+                var tasks = new UniTask[snapshot.Count];
+                for (var i = 0; i < snapshot.Count; i++)
+                    tasks[i] = RunCloseCoreAsync(snapshot[i], releasePool: false);
+
+                await UniTask.WhenAll(tasks);
             }
             finally
             {
                 ListPool<UIBase>.Release(snapshot);
             }
+        }
 
-            _backStack.Clear();
-            UnblockUI_Internal();
+        /// <summary>
+        /// 씬에 미리 배치된 UIRoot(에디터 프리뷰용)를 비활성화한다.
+        /// DDOL UIManager 루트보다 나중에 로드된 씬 UIRoot 가 레이캐스트를 가로채
+        /// Presenter 가 연결되지 않은 버튼만 눌리는 문제를 방지한다.
+        /// </summary>
+        private static void DisableActiveSceneUiRoot_Internal()
+        {
+            var scene = SceneManager.GetActiveScene();
+            if (!scene.IsValid() || !scene.isLoaded)
+                return;
+
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                if (root != null && root.name == "UIRoot")
+                    root.SetActive(false);
+            }
         }
 
         #endregion
@@ -359,50 +390,73 @@ namespace Backend.Object.Management
         /// 풀이 이미 만들어져 있는 UI 를 동기로 오픈한다.
         /// </summary>
         public static T Open<T>() where T : UIBase
-            => Instance.Open_Internal<T>();
+            => Instance?.Open_Internal<T>();
 
         /// <summary>
         /// Addressable 에서 비동기 로드하여 풀을 생성한 뒤 첫 인스턴스를 오픈한다.
         /// addressableKey 가 null 이면 AddressableKeys.UI.Get&lt;T&gt;() 를 사용.
         /// </summary>
         public static UniTask<T> OpenAsync<T>(string addressableKey = null) where T : UIBase
-            => Instance.OpenAsync_Internal<T>(addressableKey);
+        {
+            var instance = Instance;
+            return instance != null
+                ? instance.OpenAsync_Internal<T>(addressableKey)
+                : UniTask.FromResult<T>(null);
+        }
 
         /// <summary>
         /// UI 를 닫고 풀로 반환한다 (풀은 유지).
         /// </summary>
         public static void Close<T>(T ui) where T : UIBase
-            => Instance.Close_Internal(ui);
+            => Instance?.Close_Internal(ui);
 
         /// <summary>
         /// UI 를 닫고 해당 타입의 풀까지 해제한다 (Addressable 핸들도 반환).
         /// </summary>
         public static void CloseDynamic<T>(T ui) where T : UIBase
-            => Instance.CloseDynamic_Internal(ui);
+            => Instance?.CloseDynamic_Internal(ui);
 
         /// <summary>
         /// 뒤로가기 처리. InputActionHandler 콜백 또는 외부에서 직접 호출 가능.
         /// </summary>
         public static void PopBack()
-            => Instance.PopBack_Internal();
+            => Instance?.PopBack_Internal();
 
         /// <summary>
         /// 입력을 받지 않는 풀스크린 블로커를 활성화한다. 씬 전환 중 입력 차단 용도.
         /// </summary>
         public static UniTask BlockUI()
-            => Instance.BlockUI_Internal();
+        {
+            var instance = Instance;
+            return instance != null ? instance.BlockUI_Internal() : UniTask.CompletedTask;
+        }
 
         /// <summary>
         /// BlockUI 로 활성화된 블로커를 비활성화한다.
         /// </summary>
         public static void UnblockUI()
-            => Instance.UnblockUI_Internal();
+            => Instance?.UnblockUI_Internal();
 
         /// <summary>
         /// 현재 활성화된 모든 UI 를 닫고 백 스택과 블로커를 정리한다.
         /// </summary>
         public static void CloseAllUI()
-            => Instance.CloseAllUI_Internal();
+            => CloseAllUIAsync().Forget();
+
+        /// <summary>
+        /// 현재 활성화된 모든 UI 가 닫힐 때까지 대기한다.
+        /// </summary>
+        public static UniTask CloseAllUIAsync()
+        {
+            var instance = Instance;
+            return instance != null ? instance.CloseAllUI_InternalAsync() : UniTask.CompletedTask;
+        }
+
+        /// <summary>
+        /// 활성 씬에 임베드된 UIRoot 를 비활성화한다 (DDOL UIManager 루트와 충돌 방지).
+        /// </summary>
+        public static void DisableActiveSceneUiRoot()
+            => DisableActiveSceneUiRoot_Internal();
 
         #endregion
     }

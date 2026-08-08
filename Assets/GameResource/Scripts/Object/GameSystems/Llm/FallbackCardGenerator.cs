@@ -32,8 +32,68 @@ namespace Backend.Object.GameSystems.Llm
         public static GeneratedCardData Generate(string userConcept)
         {
             var concept = userConcept ?? string.Empty;
+            var constraints = ConceptConstraintHelper.Parse(concept);
             var tier = EvaluateRequestTier(concept);
             var target = ResolveDamageTarget(concept);
+
+            // 콘셉트에 데미지/방어도/회복이 명시되면 티어 기본값 대신 그 수치를 사용한다.
+            if (constraints.Damage.HasValue)
+            {
+                var mana = constraints.ManaCost
+                    ?? Mathf.Clamp(Mathf.CeilToInt(constraints.Damage.Value * 0.5f), 0, 5);
+                return BuildCard(
+                    name: target == DamageTargetType.Aoe ? "기본 파동" : "기본 일격",
+                    description: TruncateDescription(string.IsNullOrWhiteSpace(concept) ? "적에게 피해를 입힌다." : concept),
+                    cardType: CardType.Attack,
+                    manaCost: mana,
+                    effects: new List<GeneratedCardEffect>
+                    {
+                        new()
+                        {
+                            type = CardEffectType.DEAL_DAMAGE,
+                            value = TableManager.ClampEffectValue(CardEffectType.DEAL_DAMAGE, constraints.Damage.Value),
+                            target = target
+                        }
+                    });
+            }
+
+            if (constraints.Shield.HasValue)
+            {
+                var mana = constraints.ManaCost
+                    ?? Mathf.Clamp(Mathf.CeilToInt(constraints.Shield.Value * 0.5f), 0, 5);
+                return BuildCard(
+                    name: "기본 방어",
+                    description: TruncateDescription(string.IsNullOrWhiteSpace(concept) ? "방어도를 얻는다." : concept),
+                    cardType: CardType.Defense,
+                    manaCost: mana,
+                    effects: new List<GeneratedCardEffect>
+                    {
+                        new()
+                        {
+                            type = CardEffectType.GAIN_SHIELD,
+                            value = TableManager.ClampEffectValue(CardEffectType.GAIN_SHIELD, constraints.Shield.Value)
+                        }
+                    });
+            }
+
+            if (constraints.Heal.HasValue)
+            {
+                var mana = constraints.ManaCost
+                    ?? Mathf.Clamp(Mathf.CeilToInt(constraints.Heal.Value * 0.5f), 0, 5);
+                return BuildCard(
+                    name: "기본 회복",
+                    description: TruncateDescription(string.IsNullOrWhiteSpace(concept) ? "체력을 회복한다." : concept),
+                    cardType: CardType.Heal,
+                    manaCost: mana,
+                    effects: new List<GeneratedCardEffect>
+                    {
+                        new()
+                        {
+                            type = CardEffectType.HEAL_HP,
+                            value = TableManager.ClampEffectValue(CardEffectType.HEAL_HP, constraints.Heal.Value)
+                        }
+                    });
+            }
 
             return tier switch
             {

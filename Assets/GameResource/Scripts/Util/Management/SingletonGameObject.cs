@@ -18,30 +18,40 @@ namespace Backend.Util.Management
 
         protected sealed override void Awake()
         {
-            if (_instance is null)
+            // Unity fake-null: destroyed instances must be treated as absent.
+            if (_instance == null)
             {
                 _instance = this as T;
             }
             else if (_instance != this)
             {
                 Destroy(gameObject);
+                return;
             }
 
             base.Awake();
+        }
+
+        protected override void OnDestroy()
+        {
+            if (_instance == this)
+                _instance = null;
+
+            base.OnDestroy();
         }
 
         protected static T Instance
         {
             get
             {
-                if (IsQuitting)
+                if (GameStateUtil.IsQuitting || IsQuitting)
                 {
-                    UnityEngine.Debug.LogWarning("<color=#F7E600><b>[WARNING][Singleton]</b> Instance of type {typeof(T)} already destroyed on application quit. Returning null.</color>");
+                    UnityEngine.Debug.LogWarning($"<color=#F7E600><b>[WARNING][Singleton]</b> Instance of type {typeof(T)} already destroyed on application quit. Returning null.</color>");
 
                     return null;
                 }
 
-                if (_instance is null == false)
+                if (_instance != null)
                 {
                     return _instance;
                 }

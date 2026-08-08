@@ -9,8 +9,10 @@ namespace Backend.AddressableKey
         {
             private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
             {
-                { "CardController", "Assets/GameResource/Prefab/InGame/CardController.prefab" },
-                { "MonsterController", "Assets/GameResource/Prefab/InGame/MonsterController.prefab" },
+                { "AudioSource", "InGame/AudioSource.prefab" },
+                { "BattleVfxController", "InGame/BattleVfxController.prefab" },
+                { "CardController", "InGame/CardController.prefab" },
+                { "MonsterController", "InGame/MonsterController.prefab" },
             };
 
             public static string Get<T>() => Keys.TryGetValue(typeof(T).Name, out var key) ? key : null;
@@ -21,16 +23,16 @@ namespace Backend.AddressableKey
         {
             private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
             {
-                { "Icons_Node_Event_png", "Icons/Node_Event.png" },
-                { "Icons_Node_Battle_png", "Icons/Node_Battle.png" },
-                { "Icons_Node_Rest_png", "Icons/Node_Rest.png" },
-                { "Icons_Node_Treasure_png", "Icons/Node_Treasure.png" },
-                { "Icons_Node_Boss_png", "Icons/Node_Boss.png" },
-                { "Icons_Node_Elite_png", "Icons/Node_Elite.png" },
                 { "Badge_Deck", "Icons/Badge_Deck.png" },
                 { "Badge_ManaCost", "Icons/Badge_ManaCost.png" },
                 { "Badge_Stage", "Icons/Badge_Stage.png" },
                 { "Bar_EnemyHP", "Icons/Bar_EnemyHP.png" },
+                { "Bg_Death_FallenAdventurer", "Icons/Bg_Death_FallenAdventurer.png" },
+                { "Bg_Event_Camping", "Icons/Bg_Event_Camping.png" },
+                { "Bg_Event_CaveLake", "Icons/Bg_Event_CaveLake.png" },
+                { "Bg_Event_DiceGambling", "Icons/Bg_Event_DiceGambling.png" },
+                { "Bg_Event_FortuneTeller", "Icons/Bg_Event_FortuneTeller.png" },
+                { "Bg_Event_Treasure", "Icons/Bg_Event_Treasure.png" },
                 { "Button_EndTurn", "Icons/Button_EndTurn.png" },
                 { "Card_1_Defense", "Icons/Card_1_Defense.png" },
                 { "Card_2_Attack", "Icons/Card_2_Attack.png" },
@@ -43,10 +45,14 @@ namespace Backend.AddressableKey
                 { "CardFrame_Defense", "Icons/CardFrame_Defense.png" },
                 { "CardFrame_Heal", "Icons/CardFrame_Heal.png" },
                 { "CardFrame_Special", "Icons/CardFrame_Special.png" },
+                { "Icon_Deck", "Icons/Icon_Deck.png" },
                 { "Icon_EnemySkull", "Icons/Icon_EnemySkull.png" },
+                { "Icon_Graveyard", "Icons/Icon_Graveyard.png" },
                 { "Icon_Heal", "Icons/Icon_Heal.png" },
                 { "Icon_Heart", "Icons/Icon_Heart.png" },
                 { "Icon_Mana", "Icons/Icon_Mana.png" },
+                { "Icon_Map", "Icons/Icon_Map.png" },
+                { "Icon_Settings", "Icons/Icon_Settings.png" },
                 { "Icon_Shield", "Icons/Icon_Shield.png" },
                 { "Icon_Special", "Icons/Icon_Special.png" },
                 { "Icon_Swords", "Icons/Icon_Swords.png" },
@@ -66,6 +72,7 @@ namespace Backend.AddressableKey
                 { "Node_Treasure", "Icons/Node_Treasure.png" },
                 { "Pip_HP", "Icons/Pip_HP.png" },
                 { "Pip_Mana", "Icons/Pip_Mana.png" },
+                { "PromptCraft_Logo", "Icons/PromptCraft_Logo.png" },
             };
 
             public static string Get<T>() => Keys.TryGetValue(typeof(T).Name, out var key) ? key : null;
@@ -76,12 +83,16 @@ namespace Backend.AddressableKey
         {
             private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
             {
-                { "UI_MapPanel_prefab", "UI/MapPanel.prefab" },
-                { "UI_CardCreationPanel_prefab", "UI/CardCreationPanel.prefab" },
-                { "UI_MapPreviewPopup_prefab", "UI/MapPreviewPopup.prefab" },
+                { "Vfx_Shield", "Assets/GameResource/Images/VFX/Vfx_Shield.png" },
+                { "Vfx_SlashArc", "Assets/GameResource/Images/VFX/Vfx_SlashArc.png" },
+                { "Vfx_Sword", "Assets/GameResource/Images/VFX/Vfx_Sword.png" },
+                { "AttackSlashVfx", "UI/AttackSlashVfx.prefab" },
                 { "Card", "UI/Card.prefab" },
                 { "CardCreationPanel", "UI/CardCreationPanel.prefab" },
+                { "DeathPanel", "UI/DeathPanel.prefab" },
                 { "DeckInspectPopup", "UI/DeckInspectPopup.prefab" },
+                { "DefendShieldVfx", "UI/DefendShieldVfx.prefab" },
+                { "EventPanel", "UI/EventPanel.prefab" },
                 { "GamePanel", "UI/GamePanel.prefab" },
                 { "LoadingPanel", "UI/LoadingPanel.prefab" },
                 { "LobbyScreenPanel", "UI/LobbyScreenPanel.prefab" },
@@ -90,8 +101,10 @@ namespace Backend.AddressableKey
                 { "MapPanel", "UI/MapPanel.prefab" },
                 { "MapPreviewPopup", "UI/MapPreviewPopup.prefab" },
                 { "Monster", "UI/Monster.prefab" },
+                { "RestPanel", "UI/RestPanel.prefab" },
+                { "SoundSettingsPopup", "UI/SoundSettingsPopup.prefab" },
+                { "TreasurePanel", "UI/TreasurePanel.prefab" },
                 { "UIRoot", "UI/UIRoot.prefab" },
-                { "UI_DeckInspectPopup_prefab", "UI/DeckInspectPopup.prefab" },
             };
 
             public static string Get<T>() => Keys.TryGetValue(typeof(T).Name, out var key) ? key : null;
@@ -103,6 +116,23 @@ namespace Backend.AddressableKey
             private static readonly Dictionary<string, string> Keys = new Dictionary<string, string>()
             {
                 { "AudioMixer", "Assets/GameResource/Sounds/AudioMixer.mixer" },
+                { "Battle_BattleThemeA", "Assets/GameResource/Sounds/Bgm/Battle_BattleThemeA.mp3" },
+                { "Battle_DeterminedPursuit_Loop", "Assets/GameResource/Sounds/Bgm/Battle_DeterminedPursuit_Loop.wav" },
+                { "Event_AncientPowerOfSerpents", "Assets/GameResource/Sounds/Bgm/Event_AncientPowerOfSerpents.ogg" },
+                { "Event_Cave1_Holizna", "Assets/GameResource/Sounds/Bgm/Event_Cave1_Holizna.mp3" },
+                { "Event_Cave2_Holizna", "Assets/GameResource/Sounds/Bgm/Event_Cave2_Holizna.mp3" },
+                { "Event_CaveTheme", "Assets/GameResource/Sounds/Bgm/Event_CaveTheme.ogg" },
+                { "Event_Enchantress_Holizna", "Assets/GameResource/Sounds/Bgm/Event_Enchantress_Holizna.mp3" },
+                { "Event_FantasyChoir1", "Assets/GameResource/Sounds/Bgm/Event_FantasyChoir1.mp3" },
+                { "Lobby_TownTheme", "Assets/GameResource/Sounds/Bgm/Lobby_TownTheme.mp3" },
+                { "Map_FieldOfDreams", "Assets/GameResource/Sounds/Bgm/Map_FieldOfDreams.mp3" },
+                { "Rest_OldTowerInn_Loop", "Assets/GameResource/Sounds/Bgm/Rest_OldTowerInn_Loop.wav" },
+                { "Title_ALegendWillRise", "Assets/GameResource/Sounds/Bgm/Title_ALegendWillRise.mp3" },
+                { "Attack_Swing", "Assets/GameResource/Sounds/Sfx/Attack_Swing.wav" },
+                { "Card_Flip", "Assets/GameResource/Sounds/Sfx/Card_Flip.wav" },
+                { "sfx_button", "Assets/GameResource/Sounds/Sfx/sfx_button.wav" },
+                { "Shield_Sound", "Assets/GameResource/Sounds/Sfx/Shield_Sound.wav" },
+                { "UIClick_UI", "Assets/GameResource/Sounds/Sfx/UIClick_UI.wav" },
             };
 
             public static string Get<T>() => Keys.TryGetValue(typeof(T).Name, out var key) ? key : null;

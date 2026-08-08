@@ -136,8 +136,8 @@
   ],
   [
     "node_treasure_desc",
-    "영구 강화 3가지 중 하나를 선택한다.",
-    "Choose one of three permanent upgrades."
+    "체력 또는 마나 중 하나를 영구적으로 강화한다.",
+    "Permanently upgrade either HP or Mana."
   ],
   [
     "node_boss_name",
@@ -528,5 +528,65 @@
     "ui_gen_loading_5",
     "카드를 완성하는 중...",
     "Finalizing the card..."
+  ],
+  [
+    "event_cave_lake_name",
+    "동굴 내의 호수",
+    "Cave Lake"
+  ],
+  [
+    "event_cave_lake_desc",
+    "잔잔한 호수가 빛을 머금고 있다. 몸을 담그면 생명력이 강해질 것 같다.",
+    "A still lake glows softly. Bathing here may strengthen your vitality."
+  ],
+  [
+    "event_cave_lake_a",
+    "호수에 몸을 담근다 (최대 체력 +2, 전체 회복)",
+    "Bathe in the lake (Max HP +2, full heal)"
+  ],
+  [
+    "event_dice_gambling_name",
+    "주사위 도박",
+    "Dice Gamble"
+  ],
+  [
+    "event_dice_gambling_desc",
+    "낡은 주사위가 놓여 있다. 운을 시험하면 마력이 커질지도 모른다.",
+    "An old die waits. Testing your luck may expand your mana."
+  ],
+  [
+    "event_dice_gambling_a",
+    "주사위를 굴린다 (20% 확률로 최대 마나 +2)",
+    "Roll the die (20% chance: Max Mana +2)"
+  ],
+  [
+    "event_dice_gambling_win",
+    "운명의 눈이 나왔다! 최대 마나가 2 올랐다.",
+    "Fate smiles! Max Mana increased by 2."
+  ],
+  [
+    "event_dice_gambling_lose",
+    "아쉽게도 원하는 눈이 나오지 않았다.",
+    "Unfortunately, the desired face did not appear."
+  ],
+  [
+    "event_fortune_teller_name",
+    "점술사",
+    "Fortune Teller"
+  ],
+  [
+    "event_fortune_teller_desc",
+    "수정구 너머로 운명의 실이 보인다. 새로운 프롬프트의 힘을 빌릴 수 있다.",
+    "Threads of fate shimmer in the crystal. You may craft a new prompt card."
+  ],
+  [
+    "event_fortune_teller_a",
+    "점술을 받는다 (프롬프트 카드 생성)",
+    "Receive a reading (create a prompt card)"
+  ],
+  [
+    "event_continue",
+    "계속",
+    "Continue"
   ]
 ]
