@@ -1,5 +1,6 @@
 using Backend.AddressableKey;
 using Backend.Object.Management;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,7 @@ namespace Backend.Object.UI
         /// </summary>
         public void BindVisuals()
         {
-            ApplyBackground();
+            ApplyBackgroundAsync().Forget();
 
             if (_titleText != null)
                 _titleText.text = "node_treasure_name".GetLocalizeText();
@@ -53,14 +54,14 @@ namespace Backend.Object.UI
             return $"{nameKey.GetLocalizeText()}\n{descKey.GetLocalizeText()}";
         }
 
-        private void ApplyBackground()
+        private async UniTaskVoid ApplyBackgroundAsync()
         {
             if (_backgroundImage == null)
                 return;
 
-            var sprite = ResourceManager.LoadResource<Sprite>(
+            var sprite = await ResourceManager.LoadResourceAsync<Sprite>(
                 AddressableKeys.Icons.Get("Bg_Event_Treasure"));
-            if (sprite == null)
+            if (sprite == null || _backgroundImage == null)
                 return;
 
             _backgroundImage.sprite = sprite;
