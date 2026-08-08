@@ -1,5 +1,6 @@
 using Backend.AddressableKey;
 using Backend.Object.Management;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -72,25 +73,24 @@ namespace Backend.Object.UI
         /// <summary>
         /// PlayerInfo 고정 아이콘을 로드합니다.
         /// </summary>
-        public void LoadStatIcons()
+        public async UniTask LoadStatIconsAsync()
         {
-            if (_playerHealthIcon != null)
-            {
-                _playerHealthIcon.sprite = ResourceManager.LoadResource<Sprite>(AddressableKeys.Icons.Get("Icon_Heart"));
-                _playerHealthIcon.preserveAspect = true;
-            }
+            await ApplyIconAsync(_playerHealthIcon, "Icon_Heart");
+            await ApplyIconAsync(_playerManaIcon, "Icon_Mana");
+            await ApplyIconAsync(_playerShieldIcon, "Icon_Shield");
+        }
 
-            if (_playerManaIcon != null)
-            {
-                _playerManaIcon.sprite = ResourceManager.LoadResource<Sprite>(AddressableKeys.Icons.Get("Icon_Mana"));
-                _playerManaIcon.preserveAspect = true;
-            }
+        private static async UniTask ApplyIconAsync(Image target, string iconKey)
+        {
+            if (target == null)
+                return;
 
-            if (_playerShieldIcon != null)
-            {
-                _playerShieldIcon.sprite = ResourceManager.LoadResource<Sprite>(AddressableKeys.Icons.Get("Icon_Shield"));
-                _playerShieldIcon.preserveAspect = true;
-            }
+            var sprite = await ResourceManager.LoadResourceAsync<Sprite>(AddressableKeys.Icons.Get(iconKey));
+            if (sprite == null)
+                return;
+
+            target.sprite = sprite;
+            target.preserveAspect = true;
         }
 
         /// <summary>

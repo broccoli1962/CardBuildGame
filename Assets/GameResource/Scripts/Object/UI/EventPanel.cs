@@ -1,6 +1,7 @@
 using Backend.AddressableKey;
 using Backend.Object.GameSystems.Gameplay;
 using Backend.Object.Management;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,7 +37,7 @@ namespace Backend.Object.UI
             if (data == null)
                 return;
 
-            ApplyBackground(data.event_id);
+            ApplyBackgroundAsync(data.event_id).Forget();
 
             if (_titleText != null)
                 _titleText.text = data.name_key.GetLocalizeText();
@@ -91,7 +92,7 @@ namespace Backend.Object.UI
             _resultText.text = key.GetLocalizeText();
         }
 
-        private void ApplyBackground(string eventId)
+        private async UniTaskVoid ApplyBackgroundAsync(string eventId)
         {
             if (_backgroundImage == null)
                 return;
@@ -104,8 +105,8 @@ namespace Backend.Object.UI
                 _ => "Bg_Event_CaveLake",
             };
 
-            var sprite = ResourceManager.LoadResource<Sprite>(AddressableKeys.Icons.Get(iconKey));
-            if (sprite == null)
+            var sprite = await ResourceManager.LoadResourceAsync<Sprite>(AddressableKeys.Icons.Get(iconKey));
+            if (sprite == null || _backgroundImage == null)
                 return;
 
             _backgroundImage.sprite = sprite;

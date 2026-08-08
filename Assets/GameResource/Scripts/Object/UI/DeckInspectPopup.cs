@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Backend.AddressableKey;
 using Backend.Object.GameSystems.Gameplay;
 using Backend.Object.Management;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -62,6 +63,11 @@ namespace Backend.Object.UI
 
         public void ShowCards(IReadOnlyList<RuntimeCard> cards)
         {
+            ShowCardsAsync(cards).Forget();
+        }
+
+        private async UniTaskVoid ShowCardsAsync(IReadOnlyList<RuntimeCard> cards)
+        {
             ClearRows();
 
             var empty = cards == null || cards.Count == 0;
@@ -71,7 +77,7 @@ namespace Backend.Object.UI
             if (empty || _contentRoot == null)
                 return;
 
-            if (!EnsureCardPrefab())
+            if (!await EnsureCardPrefabAsync())
                 return;
 
             for (var i = 0; i < cards.Count; i++)
@@ -99,7 +105,7 @@ namespace Backend.Object.UI
             _spawnedCards.Clear();
         }
 
-        private bool EnsureCardPrefab()
+        private async UniTask<bool> EnsureCardPrefabAsync()
         {
             if (_cardPrefab != null)
                 return true;
@@ -111,7 +117,7 @@ namespace Backend.Object.UI
                 return false;
             }
 
-            _cardPrefab = ResourceManager.LoadComponent<Card>(address);
+            _cardPrefab = await ResourceManager.LoadComponentAsync<Card>(address);
             if (_cardPrefab == null)
             {
                 Debug.LogError("[DeckInspectPopup] Failed to load Card prefab.");

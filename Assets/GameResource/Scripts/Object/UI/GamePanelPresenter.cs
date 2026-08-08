@@ -17,7 +17,7 @@ namespace Backend.Object.UI
             if (View == null)
                 return;
 
-            View.LoadStatIcons();
+            View.LoadStatIconsAsync().Forget();
 
             Observable.CombineLatest(PlayerStateSystem.Hp, PlayerStateSystem.MaxHp, (hp, maxHp) => (hp, maxHp))
                 .Subscribe(tuple => View.SetHealth(tuple.hp, tuple.maxHp))
