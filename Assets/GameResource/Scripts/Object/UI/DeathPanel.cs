@@ -1,5 +1,6 @@
 using Backend.AddressableKey;
 using Backend.Object.Management;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,22 +26,27 @@ namespace Backend.Object.UI
         /// </summary>
         public void SetupVisuals()
         {
-            if (_backgroundImage != null)
-            {
-                var sprite = ResourceManager.LoadResource<Sprite>(
-                    AddressableKeys.Icons.Get("Bg_Death_FallenAdventurer"));
-                if (sprite != null)
-                {
-                    _backgroundImage.sprite = sprite;
-                    _backgroundImage.preserveAspect = false;
-                }
-            }
-
             if (_titleText != null)
                 _titleText.text = "사망";
 
             if (_messageText != null)
                 _messageText.text = "모험이 끝났습니다.\n다시 도전하시겠습니까?";
+
+            ApplyBackgroundAsync().Forget();
+        }
+
+        private async UniTaskVoid ApplyBackgroundAsync()
+        {
+            if (_backgroundImage == null)
+                return;
+
+            var sprite = await ResourceManager.LoadResourceAsync<Sprite>(
+                AddressableKeys.Icons.Get("Bg_Death_FallenAdventurer"));
+            if (sprite == null || _backgroundImage == null)
+                return;
+
+            _backgroundImage.sprite = sprite;
+            _backgroundImage.preserveAspect = false;
         }
     }
 }

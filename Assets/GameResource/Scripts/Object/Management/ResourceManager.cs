@@ -55,9 +55,25 @@ namespace Backend.Object.Management
         {
             if (_resourceCache.TryGetValue(key, out AsyncOperationHandle cachedHandle))
             {
+                if (!cachedHandle.IsDone)
+                {
+#if UNITY_WEBGL && !UNITY_EDITOR
+                    Debug.LogError(
+                        $"[ResourceManager] Sync LoadResource cannot wait on WebGL. Use LoadResourceAsync. Key : {key}");
+                    return null;
+#else
+                    cachedHandle.WaitForCompletion();
+#endif
+                }
+
                 return cachedHandle.Result as T;
             }
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+            Debug.LogError(
+                $"[ResourceManager] Sync LoadResource is not supported on WebGL. Use LoadResourceAsync. Key : {key}");
+            return null;
+#else
             AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(key);
             T resource = handle.WaitForCompletion();
 
@@ -66,12 +82,11 @@ namespace Backend.Object.Management
                 _resourceCache.Add(key, handle);
                 return resource;
             }
-            else
-            {
-                Debug.LogError($"Asset Load Fail! Key : {key}");
-                Addressables.Release(handle);
-                return null;
-            }
+
+            Debug.LogError($"Asset Load Fail! Key : {key}");
+            Addressables.Release(handle);
+            return null;
+#endif
         }
 
         private void ReleaseResource_Internal(string key)

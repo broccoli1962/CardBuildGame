@@ -109,3 +109,8 @@ InitTestScene*.unity*
 # Local LLM model weights (large binary; see StreamingAssets/Models/README.md)
 /[Aa]ssets/StreamingAssets/Models/*.gguf
 /[Aa]ssets/StreamingAssets/Models/*.gguf.meta
+
+# GitHub Pages WebGL build: keep models out of repo
+/Docs/StreamingAssets/Models/*.gguf
+/Docs/StreamingAssets/Models/*.gguf.meta
+
