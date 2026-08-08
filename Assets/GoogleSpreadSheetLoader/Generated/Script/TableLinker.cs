@@ -7,7 +7,6 @@ namespace TableData
     [CreateAssetMenu(fileName = "TableLinker", menuName = "Tables/TableLinker")]
     public class TableLinker : ScriptableObject
     {
-		 public MapNodeTypeTable MapNodeTypeTable;
 		 public StageTable StageTable;
 		 public MonsterActionTable MonsterActionTable;
 		 public CardPowerWeightTable CardPowerWeightTable;
@@ -15,12 +14,13 @@ namespace TableData
 		 public BaseCardTable BaseCardTable;
 		 public CardEffectTypeTable CardEffectTypeTable;
 		 public MapTemplateTable MapTemplateTable;
-		 public MapEventTable MapEventTable;
 		 public RestOptionTable RestOptionTable;
 		 public EliteScalingTable EliteScalingTable;
 		 public TreasureOptionTable TreasureOptionTable;
-		 public BalanceConstantTable BalanceConstantTable;
 		 public MonsterTable MonsterTable;
+		 public MapNodeTypeTable MapNodeTypeTable;
+		 public BalanceConstantTable BalanceConstantTable;
+		 public MapEventTable MapEventTable;
 
     }
 }

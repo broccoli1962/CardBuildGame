@@ -30,7 +30,7 @@ MonoBehaviour:
     _value: 10
     _desc: "\uD50C\uB808\uC774\uC5B4 \uC2DC\uC791 \uCD5C\uB300 \uCCB4\uB825"
   - _key: player_start_max_mana
-    _value: 10
+    _value: 5
     _desc: "\uD50C\uB808\uC774\uC5B4 \uC2DC\uC791 \uCD5C\uB300 \uB9C8\uB098"
   - _key: hand_size
     _value: 5
@@ -64,7 +64,7 @@ MonoBehaviour:
     _value: 1.4
     _desc: "\uC801 \uD134 \uC5F0\uCD9C \uB300\uAE30 \uC2DC\uAC04(\uCD08)"
   - _key: llm_timeout
-    _value: 15
+    _value: 60
     _desc: "\uB85C\uCEEC LLM \uD638\uCD9C \uD0C0\uC784\uC544\uC6C3(\uCD08)"
   - _key: llm_temperature
     _value: 0.7

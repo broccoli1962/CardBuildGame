@@ -16,6 +16,7 @@ namespace Backend.Object.GameSystems.Gameplay
         private static readonly List<RuntimeCard> _discardPile = new();
         private static readonly Subject<Unit> _onHandChanged = new();
         private static readonly ReactiveProperty<int> _masterCount = new(0);
+        private static bool _fullHandResetPending;
 
         #endregion
 
@@ -75,7 +76,23 @@ namespace Backend.Object.GameSystems.Gameplay
             _drawPile.Clear();
             _drawPile.AddRange(_masterDeck);
             Shuffle(_drawPile);
+
+            // 마스터 덱 RuntimeCard(Uid)는 전투 간에 재사용된다.
+            // CardController가 이전 손패를 kept로 오인하지 않도록 전체 재딜을 요청한다.
+            _fullHandResetPending = true;
             DrawInitialHand();
+        }
+
+        /// <summary>
+        /// 전투 경계에서 손패 뷰를 전부 다시 딜해야 하면 true를 반환하고 플래그를 소비합니다.
+        /// </summary>
+        public static bool ConsumeFullHandReset()
+        {
+            if (!_fullHandResetPending)
+                return false;
+
+            _fullHandResetPending = false;
+            return true;
         }
 
         public static void DrawInitialHand()
@@ -179,6 +196,7 @@ namespace Backend.Object.GameSystems.Gameplay
             _drawPile.Clear();
             _hand.Clear();
             _discardPile.Clear();
+            _fullHandResetPending = true;
             PublishMasterCount();
             _onHandChanged.OnNext(Unit.Default);
         }

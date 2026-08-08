@@ -77,7 +77,7 @@ namespace Backend.Object.UI
             if (_clearedMark != null)
             {
                 _clearedMark.gameObject.SetActive(state == MapNodeState.Cleared);
-                _clearedMark.text = "✓";
+                _clearedMark.text = "OK";
             }
 
             ApplyState(nodeType, state);
@@ -230,13 +230,13 @@ namespace Backend.Object.UI
 
         private static string GetEmojiFallback(MapNodeType type) => type switch
         {
-            MapNodeType.Battle => "⚔️",
-            MapNodeType.Elite => "☠️",
-            MapNodeType.Rest => "🔥",
-            MapNodeType.Event => "❓",
-            MapNodeType.Treasure => "💎",
-            MapNodeType.Boss => "👑",
-            _ => "•",
+            MapNodeType.Battle => "전투",
+            MapNodeType.Elite => "정예",
+            MapNodeType.Rest => "휴식",
+            MapNodeType.Event => "사건",
+            MapNodeType.Treasure => "보물",
+            MapNodeType.Boss => "보스",
+            _ => "-",
         };
 
         private static Color GetTypeColor(MapNodeType type, string colorHex)

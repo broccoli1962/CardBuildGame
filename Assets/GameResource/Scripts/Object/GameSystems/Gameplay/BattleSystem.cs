@@ -1,3 +1,4 @@
+using System;
 using Backend.Object.Management;
 using Cysharp.Threading.Tasks;
 using R3;
@@ -9,6 +10,8 @@ namespace Backend.Object.GameSystems.Gameplay
     {
         #region Fields
 
+        private const int EnemyDeathPresentationTimeoutMs = 2000;
+
         private static readonly ReactiveProperty<int> _enemyHp = new(0);
         private static readonly ReactiveProperty<int> _enemyMaxHp = new(0);
         private static readonly ReactiveProperty<int> _enemyShield = new(0);
@@ -16,6 +19,8 @@ namespace Backend.Object.GameSystems.Gameplay
         private static readonly ReactiveProperty<string> _enemyNameKey = new(string.Empty);
         private static readonly ReactiveProperty<EnemyActionPreview> _nextAction = new(default);
         private static readonly Subject<string> _onBattleLog = new();
+        private static readonly Subject<BattleVfxType> _onPlayerVfx = new();
+        private static readonly Subject<Unit> _onEnemyDeath = new();
 
         private static string _monsterId;
         private static int _enemyTurnIndex;
@@ -25,7 +30,9 @@ namespace Backend.Object.GameSystems.Gameplay
         private static bool _isBoss;
         private static bool _isBattleActive;
         private static bool _isEnemyTurnRunning;
+        private static bool _isResolvingEnemyDeath;
         private static int _turnSequence;
+        private static UniTaskCompletionSource _enemyDeathPresentationTcs;
 
         #endregion
 
@@ -38,6 +45,8 @@ namespace Backend.Object.GameSystems.Gameplay
         public static ReadOnlyReactiveProperty<string> EnemyNameKey => _enemyNameKey;
         public static ReadOnlyReactiveProperty<EnemyActionPreview> NextAction => _nextAction;
         public static Observable<string> OnBattleLog => _onBattleLog;
+        public static Observable<BattleVfxType> OnPlayerVfx => _onPlayerVfx;
+        public static Observable<Unit> OnEnemyDeath => _onEnemyDeath;
         public static bool IsBattleActive => _isBattleActive;
         public static string MonsterId => _monsterId;
 
@@ -49,6 +58,8 @@ namespace Backend.Object.GameSystems.Gameplay
         {
             _turnSequence = 0;
             _isEnemyTurnRunning = false;
+            _isResolvingEnemyDeath = false;
+            CompleteEnemyDeathPresentation();
         }
 
         /// <summary>
@@ -76,6 +87,8 @@ namespace Backend.Object.GameSystems.Gameplay
             _enemyTurnIndex = 0;
             _isBattleActive = true;
             _isEnemyTurnRunning = false;
+            _isResolvingEnemyDeath = false;
+            CompleteEnemyDeathPresentation();
             _turnSequence++;
 
             PlayerStateSystem.ResetBattleState();
@@ -119,11 +132,19 @@ namespace Backend.Object.GameSystems.Gameplay
 
             if (_enemyHp.Value <= 0)
             {
-                OnEnemyDefeated();
+                ResolveEnemyDefeatAsync().Forget();
                 return true;
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// 몬스터 사망 연출이 끝났음을 BattleSystem에 알립니다.
+        /// </summary>
+        public static void CompleteEnemyDeathPresentation()
+        {
+            _enemyDeathPresentationTcs?.TrySetResult();
         }
 
         /// <summary>
@@ -154,7 +175,9 @@ namespace Backend.Object.GameSystems.Gameplay
             _turnSequence++;
             _isBattleActive = false;
             _isEnemyTurnRunning = false;
+            _isResolvingEnemyDeath = false;
             _monsterId = null;
+            CompleteEnemyDeathPresentation();
 
             _enemyHp.Value = 0;
             _enemyMaxHp.Value = 0;
@@ -218,16 +241,47 @@ namespace Backend.Object.GameSystems.Gameplay
             BeginPlayerTurn();
         }
 
-        private static void OnEnemyDefeated()
+        private static async UniTaskVoid ResolveEnemyDefeatAsync()
         {
+            if (_isResolvingEnemyDeath)
+                return;
+
+            _isResolvingEnemyDeath = true;
             _isBattleActive = false;
             _turnSequence++;
+
+            await WaitForEnemyDeathPresentationAsync();
+
+            // 다음 전투에서 동일 name_key여도 UI가 다시 스폰되도록 비운다.
+            _enemyNameKey.Value = string.Empty;
+            _nextAction.Value = default;
+
             PlayerStateSystem.RefillMana();
             GameManager.SetPhase(GamePhase.NodeClear);
             GameManager.StageClear();
             LogBattle("적 처치!");
+            _isResolvingEnemyDeath = false;
         }
 
+        private static async UniTask WaitForEnemyDeathPresentationAsync()
+        {
+            _enemyDeathPresentationTcs = new UniTaskCompletionSource();
+            try
+            {
+                _onEnemyDeath.OnNext(Unit.Default);
+                await UniTask.WhenAny(
+                    _enemyDeathPresentationTcs.Task,
+                    UniTask.Delay(EnemyDeathPresentationTimeoutMs, DelayType.Realtime));
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[BattleSystem] Enemy death presentation wait failed: {e.Message}");
+            }
+            finally
+            {
+                _enemyDeathPresentationTcs = null;
+            }
+        }
         #endregion
 
         #region Intent
@@ -321,15 +375,18 @@ namespace Backend.Object.GameSystems.Gameplay
             {
                 case CardEffectType.DEAL_DAMAGE:
                     DealDamageToEnemy(effect.Value, effect.Target);
+                    EmitPlayerVfx(BattleVfxType.Attack);
                     break;
 
                 case CardEffectType.GAIN_SHIELD:
                     PlayerStateSystem.GainShield(effect.Value);
+                    EmitPlayerVfx(BattleVfxType.Defend);
                     LogBattle($"방어도 +{effect.Value}");
                     break;
 
                 case CardEffectType.HEAL_HP:
                     PlayerStateSystem.Heal(effect.Value);
+                    EmitPlayerVfx(BattleVfxType.Heal);
                     LogBattle(effect.Value >= 99 ? "체력 완전 회복" : $"체력 +{effect.Value}");
                     break;
 
@@ -405,12 +462,14 @@ namespace Backend.Object.GameSystems.Gameplay
             {
                 case EnemyActionType.Attack:
                 case EnemyActionType.Breath:
+                    EmitPlayerVfx(BattleVfxType.EnemyAttack);
                     PlayerStateSystem.TakeDamage(preview.Value);
                     LogBattle($"적 공격 {preview.Value}");
                     break;
 
                 case EnemyActionType.Defend:
                     _enemyShield.Value += preview.Value;
+                    EmitPlayerVfx(BattleVfxType.EnemyDefend);
                     LogBattle($"적 방어도 +{preview.Value}");
                     break;
 
@@ -472,6 +531,11 @@ namespace Backend.Object.GameSystems.Gameplay
         #endregion
 
         #region Helpers
+
+        private static void EmitPlayerVfx(BattleVfxType type)
+        {
+            _onPlayerVfx.OnNext(type);
+        }
 
         private static void LogBattle(string message)
         {

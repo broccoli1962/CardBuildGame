@@ -43,7 +43,7 @@ namespace Backend.Object.GameSystems.Llm
         }
 
         /// <summary>
-        /// 프롬프트로부터 텍스트를 생성한다.
+        /// 프롬프트로부터 텍스트를 생성한다. Qwen Instruct용 ChatML 로 감싼다.
         /// </summary>
         public async UniTask<string> GenerateAsync(
             string prompt,
@@ -71,14 +71,30 @@ namespace Backend.Object.GameSystems.Llm
                 SamplingPipeline = samplingPipeline,
             };
 
+            var chatPrompt = WrapChatMl(prompt);
             var builder = new StringBuilder();
-            await foreach (var token in executor.InferAsync(prompt, inferenceParams, ct))
+            await foreach (var token in executor.InferAsync(chatPrompt, inferenceParams, ct))
             {
                 builder.Append(token);
                 onToken?.Invoke(token);
             }
 
             return builder.ToString();
+        }
+
+        /// <summary>
+        /// Qwen2.5-Instruct ChatML 템플릿. 미적용 시 모델이 JSON을 반복 생성하기 쉽다.
+        /// </summary>
+        private static string WrapChatMl(string userContent)
+        {
+            return
+                "<|im_start|>system\n" +
+                "Follow the user instructions exactly. When asked for JSON, reply with exactly one JSON object and nothing else.\n" +
+                ImEnd + "\n" +
+                "<|im_start|>user\n" +
+                userContent + "\n" +
+                ImEnd + "\n" +
+                "<|im_start|>assistant\n";
         }
 
         public void Dispose()

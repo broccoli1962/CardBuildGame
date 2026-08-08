@@ -34,6 +34,13 @@ namespace Backend.Object.UI
         private string _loadedFrameKey;
         private string _loadedIconKey;
         private int _bindVersion;
+        private bool _hoverEnabled = true;
+        private bool _interactable = true;
+
+        /// <summary>
+        /// 현재 바인딩된 런타임 카드입니다.
+        /// </summary>
+        public RuntimeCard BoundCard => _runtimeCard;
 
         /// <summary>
         /// 런타임 카드 데이터를 UI 텍스트·프레임·아이콘에 바인딩합니다.
@@ -48,6 +55,7 @@ namespace Backend.Object.UI
 
             _runtimeCard = card;
             _bindVersion++;
+            ResetTravelVisual();
 
             if (_nameText != null)
             {
@@ -73,16 +81,44 @@ namespace Backend.Object.UI
             LoadVisualsAsync(card, _bindVersion).Forget();
         }
 
+        /// <summary>
+        /// 호버 연출 사용 여부를 설정합니다. 덱 조회처럼 그리드 배치에서는 끄는 것이 안전합니다.
+        /// </summary>
+        public void SetHoverEnabled(bool enabled)
+        {
+            _hoverEnabled = enabled;
+            if (!enabled)
+                ResetHoverState();
+        }
+
+        /// <summary>
+        /// 클릭 사용 가능 여부를 설정합니다. 이동 연출 중에는 끄는 것이 안전합니다.
+        /// </summary>
+        public void SetInteractable(bool interactable)
+        {
+            _interactable = interactable;
+            SetHoverEnabled(interactable);
+        }
+
+        /// <summary>
+        /// 이동 연출 전후 스케일·호버 상태를 초기화합니다.
+        /// </summary>
+        public void ResetTravelVisual()
+        {
+            ResetHoverState();
+            CachedTransform.localScale = Vector3.one;
+        }
+
         public void TryUse()
         {
-            if (_runtimeCard == null)
+            if (!_interactable || _runtimeCard == null)
                 return;
             DeckSystem.TryPlayCard(_runtimeCard);
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (_isHovered)
+            if (!_hoverEnabled || _isHovered)
                 return;
 
             _isHovered = true;
@@ -174,6 +210,11 @@ namespace Backend.Object.UI
         private void ResetHoverState()
         {
             CancelHoverMotion();
+
+            // 호버 중이 아닐 때 스케일을 강제 복원하면 드로우/버리기 이동 연출 스케일이 깨진다.
+            if (!_isHovered)
+                return;
+
             _isHovered = false;
             CachedTransform.localScale = Vector3.one;
         }

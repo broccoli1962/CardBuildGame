@@ -17,6 +17,8 @@ namespace Backend.Object.UI
             if (View == null)
                 return;
 
+            View.LoadStatIcons();
+
             Observable.CombineLatest(PlayerStateSystem.Hp, PlayerStateSystem.MaxHp, (hp, maxHp) => (hp, maxHp))
                 .Subscribe(tuple => View.SetHealth(tuple.hp, tuple.maxHp))
                 .AddTo(_disposables);
@@ -25,9 +27,20 @@ namespace Backend.Object.UI
                 .Subscribe(tuple => View.SetMana(tuple.mana, tuple.maxMana))
                 .AddTo(_disposables);
 
+            PlayerStateSystem.Shield
+                .Subscribe(shield => View.SetShield(shield))
+                .AddTo(_disposables);
+
             if (View.EndPlayerTurnButton != null)
             {
                 View.EndPlayerTurnButton.OnClickAsObservable().Subscribe(_ => BattleSystem.EndPlayerTurn())
+                    .AddTo(_disposables);
+            }
+
+            if (View.OpenSoundSettingsButton != null)
+            {
+                View.OpenSoundSettingsButton.OnClickAsObservable()
+                    .Subscribe(_ => UIManager.OpenAsync<SoundSettingsPopup>().Forget())
                     .AddTo(_disposables);
             }
 

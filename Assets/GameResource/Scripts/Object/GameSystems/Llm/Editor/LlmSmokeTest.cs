@@ -41,8 +41,10 @@ namespace Backend.Object.GameSystems.Llm.EditorTools
                 var loadMs = sw.ElapsedMilliseconds;
 
                 const string prompt =
-                    "You are a card game designer. Return ONLY JSON: {\"name\":\"test\",\"description\":\"d\",\"card_type\":\"attack\",\"mana_cost\":2,\"effects\":[{\"type\":\"DEAL_DAMAGE\",\"value\":5}]}\n" +
-                    "Player request: simple attack card\n";
+                    "You are a card game designer. Return ONLY one JSON object with no markdown.\n" +
+                    "Schema: {\"name\":\"8 chars max\",\"description\":\"short\",\"card_type\":\"attack\",\"mana_cost\":2,\"effects\":[{\"type\":\"DEAL_DAMAGE\",\"value\":5,\"target\":\"single\"}]}\n" +
+                    "Stop immediately after the closing brace.\n" +
+                    "Player request: simple attack card";
 
                 sw.Restart();
                 var result = await service.GenerateAsync(prompt, maxTokens: 128, temperature: 0.7f);
